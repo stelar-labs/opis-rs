@@ -1,0 +1,10 @@
+[package]
+name = "opis"
+version = "0.1.0"
+edition = "2018"
+license = "MIT"
+description = "Opis is a big integer, in little endian order, arithmetic library written in Rust."
+repository = "https://github.com/seg-software/rust-opis"
+readme = "README.md"
+
+[dependencies]
