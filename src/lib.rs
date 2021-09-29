@@ -1,12 +1,10 @@
 
+use std::fmt::Write;
+
 #[derive(Clone, Debug)]
 pub struct Int { bytes: Vec<u8> }
 
 impl Int {
-
-    pub fn new() -> Self {
-        Self { bytes:  vec![0] }
-    }
 
     pub fn add(self, n: &Int) -> Self {
 
@@ -20,7 +18,7 @@ impl Int {
 
         let mut carry = 0;
 
-        let mut res = Int::new();
+        let mut res = Int { bytes: vec![] };
 
         for x in 0..res_len {
 
@@ -62,7 +60,7 @@ impl Int {
 
         let mut int_str: String = s.to_string();
 
-        while s > "0" {
+        while int_str > "0".to_string() {
         
             let (s_half, rem) = half(&int_str);
     
@@ -94,6 +92,26 @@ impl Int {
 
         Self { bytes: res }
 
+    }
+
+    pub fn as_binary(self) -> String {
+        
+        let mut s: String = String::with_capacity(self.bytes.len() * 8);
+
+        for b in self.bytes {
+
+            let mut b_str: String = String::new();
+
+            write!(&mut b_str, "{:b}", b).unwrap();
+
+            let rev_b_str: String = b_str.chars().rev().collect::<String>();
+
+            s.push_str(&rev_b_str);
+
+        }
+
+        s
+        
     }
 
 }
