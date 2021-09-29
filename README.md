@@ -7,7 +7,7 @@ In Cargo.toml
 ```
 
 [dependencies]
-opis = "0.1.0"
+opis = "0.2.0"
 
 ```
 
@@ -20,23 +20,16 @@ use opis::Int;
 
 ## Features
 - Representation of integers of any length.
-- Addition
+- Addition.
+- Get the binary representation of an integer.
 
 ## Functions
-
-### New
-
-```
-
-let int1: Int = Int::new();
-
-```
 
 ### From
 
 ```
 
-let int2: Int = Int::from("6747");
+let integer: Int = Int::from("6747");
 
 ```
 
@@ -48,11 +41,19 @@ let sum: Int = int1.add(&int2);
 
 ```
 
+### As Binary
+
+```
+
+let binary_str: String = integer.as_binary();
+
+```
+
 ## Future Topics
 - Multiplication
 
 ## Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2021-09-27
+2021-09-29
 
