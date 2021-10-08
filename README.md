@@ -7,7 +7,7 @@ In Cargo.toml
 ```
 
 [dependencies]
-opis = "0.2.0"
+opis = "0.3.0"
 
 ```
 
@@ -59,5 +59,5 @@ let binary_str: String = integer.to_str(2);
 ## Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2021-10-06
+2021-10-08
 
