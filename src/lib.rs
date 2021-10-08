@@ -1,8 +1,23 @@
 
-use std::fmt::Write;
+use std::error::Error;
+use std::fmt;
+
+mod base2;
+mod base10;
 
 #[derive(Clone, Debug)]
-pub struct Int { bytes: Vec<u8> }
+pub struct Int { pub bytes: Vec<u8> }
+
+#[derive(Debug)]
+struct CustomError(String);
+
+impl fmt::Display for CustomError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Opis Error: {}", self.0)
+    }
+}
+
+impl Error for CustomError {}
 
 impl Int {
 
@@ -13,8 +28,9 @@ impl Int {
         let b_len = n.bytes.len();
 
         let res_len =
-            if a_len > b_len { a_len }
-            else { b_len };
+            if a_len > b_len {
+                a_len
+            } else { b_len };
 
         let mut carry = 0;
 
@@ -23,12 +39,14 @@ impl Int {
         for x in 0..res_len {
 
             let a_byte =
-                if x < a_len { self.bytes[x] }
-                else { 0 };
+                if x < a_len {
+                    self.bytes[x]
+                } else { 0 };
 
             let b_byte = 
-                if x < b_len { n.bytes[x] }
-                else { 0 };
+                if x < b_len {
+                    n.bytes[x]
+                } else { 0 };
 
             let s: u16 = a_byte as u16 + carry as u16 + b_byte as u16;
 
@@ -54,102 +72,28 @@ impl Int {
 
     }
 
-    pub fn from(s: &str) -> Self {
+    pub fn from_str(s: &str, r: u8) -> Result<Self, Box<dyn Error>> {
 
-        let mut b_str: String = String::new();
-
-        let mut int_str: String = s.to_string();
-
-        while int_str > "0".to_string() {
-        
-            let (s_half, rem) = half(&int_str);
-    
-            int_str = s_half;
-    
-            b_str.push_str(&rem.to_string());
-    
+        match r {
+            10 => {
+                let b = base10::from(s)?;
+                Ok(Self { bytes: b })
+            },
+            _ => Err(Box::new(CustomError("base unsupported".into())))
         }
-
-        let mut res: Vec<u8> = Vec::new();
-
-        (0..b_str.len())
-            .step_by(8)
-            .for_each(|x| {
-                
-                let end =
-                    if x + 8 > b_str.len() { b_str.len() }
-                    else { x + 8 };
-
-                let slice: &str = &b_str[x..end];
-
-                let rev_slice: String = slice.chars().rev().collect::<String>();
-
-                let byte: u8 = u8::from_str_radix(&rev_slice, 2).unwrap();
-
-                res.push(byte);
-
-            });
-
-        Self { bytes: res }
 
     }
 
-    pub fn as_binary(self) -> String {
+    pub fn to_str(self, r: u8) -> Result<String, Box<dyn Error>> {
         
-        let mut s: String = String::with_capacity(self.bytes.len() * 8);
-
-        for b in self.bytes {
-
-            let mut b_str: String = String::new();
-
-            write!(&mut b_str, "{:b}", b).unwrap();
-
-            let rev_b_str: String = b_str.chars().rev().collect::<String>();
-
-            s.push_str(&rev_b_str);
-
+        match r {
+            2 => {
+                let s = base2::to_str(self.bytes);
+                Ok(s)
+            },
+            _ => Err(Box::new(CustomError("base unsupported".into())))
         }
 
-        s
-        
     }
-
-}
-
-fn half(s: &str) -> (String, u8) {
-
-    let mut split: Vec<_> = s.split("").collect();
-    
-    split.retain(|&x| x != "");
-
-    let mut res: String = String::new();
-
-    let mut rem: u8 = 0;
-
-    for i in split {
-
-        let n_str = format!("{}{}", rem, i);
-
-        let n = u8::from_str_radix(&n_str, 10).unwrap();
-
-        let d = n/2;
-
-        if res == String::new() {
-
-            if d != 0 {
-                res.push_str(&d.to_string());
-            }
-
-        } else {
-
-            res.push_str(&d.to_string());
-
-        }
-        
-        rem = n%2;
-
-    }
-
-    (res, rem)
 
 }

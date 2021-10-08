@@ -25,11 +25,11 @@ use opis::Int;
 
 ## Functions
 
-### From
+### From Str
 
 ```
 
-let integer: Int = Int::from("6747");
+let integer: Int = Int::from_str("6747", 10);
 
 ```
 
@@ -41,19 +41,23 @@ let sum: Int = int1.add(&int2);
 
 ```
 
-### As Binary
+### To Str
 
 ```
 
-let binary_str: String = integer.as_binary();
+let binary_str: String = integer.to_str(2);
 
 ```
 
 ## Future Topics
+- Subtraction
 - Multiplication
+- Division
+- Remainder
+- Full Base2, Base10 & Base16 conversion support
 
 ## Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2021-09-29
+2021-10-06
 
