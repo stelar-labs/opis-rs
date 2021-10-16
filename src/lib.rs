@@ -21,32 +21,21 @@ impl Error for CustomError {}
 
 impl Int {
 
-    pub fn add(self, n: &Int) -> Self {
+    // basic arithmetic
 
-        let a_len = self.bytes.len();
-        
-        let b_len = n.bytes.len();
+    pub fn add(self, b: &Int) -> Self {
 
-        let res_len =
-            if a_len > b_len {
-                a_len
-            } else { b_len };
+        let a_len = self.bytes.len(); let b_len = b.bytes.len();
 
-        let mut carry = 0;
+        let res_len = if a_len > b_len { a_len } else { b_len };
 
-        let mut res = Int { bytes: vec![] };
+        let mut carry = 0; let mut res = Int { bytes: vec![] };
 
         for x in 0..res_len {
 
-            let a_byte =
-                if x < a_len {
-                    self.bytes[x]
-                } else { 0 };
+            let a_byte = if x < a_len { self.bytes[x] } else { 0 };
 
-            let b_byte = 
-                if x < b_len {
-                    n.bytes[x]
-                } else { 0 };
+            let b_byte = if x < b_len { b.bytes[x] } else { 0 };
 
             let s: u16 = a_byte as u16 + carry as u16 + b_byte as u16;
 
@@ -62,15 +51,39 @@ impl Int {
 
         }
 
-        if carry == 1 {
-
-            res.bytes.push(carry);
-
-        }
+        if carry == 1 { res.bytes.push(carry) }
 
         res
 
     }
+
+    pub fn sub(self, b: &Int) -> Result<Self, Box<dyn Error>> {
+
+        match &self.cmp(b)[..] {
+            
+            "greater" => {
+
+                let res = Int::from_str("10", 10)?;
+            
+                Ok(res)
+
+            },
+
+            _ => {
+                Err(Box::new(CustomError("b is greater than a!".into())))
+            }
+
+        }
+
+    }
+
+    pub fn mul() {}
+
+    pub fn div() {}
+
+    pub fn rem() {}
+
+    // string conversion functions
 
     pub fn from_str(s: &str, r: u8) -> Result<Self, Box<dyn Error>> {
 
@@ -79,7 +92,7 @@ impl Int {
                 let b = base10::from(s)?;
                 Ok(Self { bytes: b })
             },
-            _ => Err(Box::new(CustomError("base unsupported".into())))
+            _ => Err(Box::new(CustomError("base unsupported!".into())))
         }
 
     }
@@ -92,6 +105,41 @@ impl Int {
                 Ok(s)
             },
             _ => Err(Box::new(CustomError("base unsupported".into())))
+        }
+
+    }
+
+    // comparison function
+
+    pub fn cmp(self, b: &Int) -> String {
+
+        let a_len = self.bytes.len();
+
+        let b_len = b.bytes.len();
+
+        if a_len > b_len {
+
+            return "greater".to_string()
+
+        } else if a_len < b_len { 
+            
+            return "lesser".to_string()
+        
+        } else {
+
+            if self.bytes[a_len - 1] > b.bytes[b_len - 1] {
+
+                return "greater".to_string()
+
+            } else if self.bytes[a_len - 1] < b.bytes[b_len - 1] {
+
+                return "lesser".to_string()
+                
+            } else {
+
+                return "equal".to_string()
+
+            }
         }
 
     }

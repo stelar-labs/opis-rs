@@ -3,13 +3,11 @@ use std::error::Error;
 
 pub fn from(s: &str) -> Result<Vec<u8>, Box<dyn Error>> {
 
-    // check digits are base10
-
     let mut binary_str: String = String::new();
 
     let mut integer_str: String = s.to_string();
 
-    while integer_str > "0".to_string() {
+    while integer_str != "0".to_string() {
 
         let (s_half, rem) = half(&integer_str);
 
@@ -44,7 +42,7 @@ pub fn from(s: &str) -> Result<Vec<u8>, Box<dyn Error>> {
 
 }
 
-pub fn half(s: &str) -> (String, u8) {
+fn half(s: &str) -> (String, u8) {
 
     let mut split: Vec<_> = s.split("").collect();
     
@@ -62,17 +60,7 @@ pub fn half(s: &str) -> (String, u8) {
 
         let d = n/2;
 
-        if res == String::new() {
-
-            if d != 0 {
-                res.push_str(&d.to_string());
-            }
-
-        } else {
-
-            res.push_str(&d.to_string());
-
-        }
+        res.push_str(&d.to_string());
         
         rem = n%2;
 

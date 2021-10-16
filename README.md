@@ -1,5 +1,5 @@
 # Opis Rust
-Opis is a big integer, in little endian order, arithmetic library written in Rust.
+Opis is an arithmetic library for natural numbers written in Rust.
 
 ## Usage
 
@@ -7,7 +7,7 @@ In Cargo.toml
 ```
 
 [dependencies]
-opis = "0.3.0"
+opis = "0.4.0"
 
 ```
 
@@ -20,10 +20,12 @@ use opis::Int;
 
 ## Features
 - Representation of integers of any length.
-- Addition.
-- Get the binary representation of an integer.
+- There are three groups of functions: string conversion, basic arithmetic & comparison
+- String Conversion functions support base 2, 10 & 16.
+- Basic Arithmetic functions are addition, subtration, multiplication, division & remainder.
+- Comparision function checks between integers a and b if a is greater, lesser or equal to b.
 
-## Functions
+## String Conversion Functions
 
 ### From Str
 
@@ -33,19 +35,21 @@ let integer: Int = Int::from_str("6747", 10);
 
 ```
 
-### Add
-
-```
-
-let sum: Int = int1.add(&int2);
-
-```
-
 ### To Str
 
 ```
 
 let binary_str: String = integer.to_str(2);
+
+```
+
+## Basic Arithmetic Functions
+
+### Add
+
+```
+
+let sum: Int = int1.add(&int2);
 
 ```
 
@@ -59,5 +63,5 @@ let binary_str: String = integer.to_str(2);
 ## Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2021-10-08
+2021-10-15
 
