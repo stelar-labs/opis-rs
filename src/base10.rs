@@ -48,6 +48,8 @@ fn half(s: &str) -> (String, u8) {
     
     split.retain(|&x| x != "");
 
+    let split_size = split.len();
+
     let mut res: String = String::new();
 
     let mut rem: u8 = 0;
@@ -60,7 +62,23 @@ fn half(s: &str) -> (String, u8) {
 
         let d = n/2;
 
-        res.push_str(&d.to_string());
+        if res == String::new() {
+
+            if split_size == 1 {
+
+                res.push_str(&d.to_string())
+
+            } else {
+            
+                if d != 0 { res.push_str(&d.to_string()) }
+
+            }
+
+        } else {
+
+            res.push_str(&d.to_string())
+
+        }
         
         rem = n%2;
 

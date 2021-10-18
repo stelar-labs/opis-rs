@@ -1,5 +1,5 @@
 # Opis Rust
-Opis is an arithmetic library for natural numbers written in Rust.
+Opis is an arithmetic library for positive integers of any size written in Rust.
 
 ## Usage
 
@@ -7,7 +7,7 @@ In Cargo.toml
 ```
 
 [dependencies]
-opis = "0.4.0"
+opis = "0.5.0"
 
 ```
 
@@ -20,12 +20,13 @@ use opis::Int;
 
 ## Features
 - Representation of integers of any length.
-- There are three groups of functions: string conversion, basic arithmetic & comparison
-- String Conversion functions support base 2, 10 & 16.
-- Basic Arithmetic functions are addition, subtration, multiplication, division & remainder.
+- Integer bytes are stored in little endian byte order.
+- There are three groups of functions: conversion, arithmetic & comparison
+- Conversion functions support base 2, 10 & 16.
+- Arithmetic functions are addition, subtration, multiplication, division & remainder.
 - Comparision function checks between integers a and b if a is greater, lesser or equal to b.
 
-## String Conversion Functions
+## Conversion Functions
 
 ### From Str
 
@@ -43,7 +44,7 @@ let binary_str: String = integer.to_str(2);
 
 ```
 
-## Basic Arithmetic Functions
+## Arithmetic Functions
 
 ### Add
 
@@ -53,8 +54,24 @@ let sum: Int = int1.add(&int2);
 
 ```
 
+### Sub
+
+```
+
+let diff: Int = int1.sub(&int2);
+
+```
+
+## Comparison Function
+
+match &int1.cmp(&int2)[..] {
+    "greater" => Println!("a is greater than b!"),
+    "lesser" => Println!("a is lesser than b!"),
+    "equal" => Println!("a is equal to b!"),
+    _ => Println!("no match!"),
+}
+
 ## Future Topics
-- Subtraction
 - Multiplication
 - Division
 - Remainder
@@ -63,5 +80,5 @@ let sum: Int = int1.add(&int2);
 ## Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2021-10-15
+2021-10-18
 
