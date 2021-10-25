@@ -7,7 +7,7 @@ In Cargo.toml
 ```
 
 [dependencies]
-opis = "0.5.0"
+opis = "0.6.0"
 
 ```
 
@@ -20,7 +20,7 @@ use opis::Int;
 
 ## Features
 - Representation of integers of any length.
-- Integer bytes are stored in little endian byte order.
+- Integer bits are stored in big endian bit order.
 - There are three groups of functions: conversion, arithmetic & comparison
 - Conversion functions support base 2, 10 & 16.
 - Arithmetic functions are addition, subtration, multiplication, division & remainder.
@@ -50,7 +50,7 @@ let binary_str: String = integer.to_str(2);
 
 ```
 
-let sum: Int = int1.add(&int2);
+let sum: Int = int1.add(int2);
 
 ```
 
@@ -58,11 +58,20 @@ let sum: Int = int1.add(&int2);
 
 ```
 
-let diff: Int = int1.sub(&int2);
+let diff: Int = int1.sub(int2)?;
+
+```
+
+### Mul
+```
+
+let mul: Int = int1.mul(int2);
 
 ```
 
 ## Comparison Function
+
+```
 
 match &int1.cmp(&int2)[..] {
     "greater" => Println!("a is greater than b!"),
@@ -71,8 +80,9 @@ match &int1.cmp(&int2)[..] {
     _ => Println!("no match!"),
 }
 
+```
+
 ## Future Topics
-- Multiplication
 - Division
 - Remainder
 - Full Base2, Base10 & Base16 conversion support
@@ -80,5 +90,5 @@ match &int1.cmp(&int2)[..] {
 ## Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2021-10-18
+2021-10-22
 

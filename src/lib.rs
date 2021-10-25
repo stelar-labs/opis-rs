@@ -2,11 +2,10 @@
 use std::error::Error;
 use std::fmt;
 
-mod base2;
 mod base10;
 
 #[derive(Clone, Debug)]
-pub struct Int { pub bytes: Vec<u8> }
+pub struct Int { pub bits: Vec<u8> }
 
 #[derive(Debug)]
 struct CustomError(String);
@@ -21,97 +20,83 @@ impl Error for CustomError {}
 
 impl Int {
 
-    // arithmetic
+    pub fn add(mut self, mut b: Int) -> Self {
 
-    pub fn add(self, b: &Int) -> Self {
+        let mut res = Int { bits: vec![] };
 
-        let a_len = self.bytes.len(); let b_len = b.bytes.len();
+        let mut carry = 0;
 
-        let res_len = if a_len > b_len { a_len } else { b_len };
+        while self.bits.len() > 0 || b.bits.len() > 0 {
 
-        let mut carry = 0; let mut res = Int { bytes: vec![] };
+            let a_bit = match self.bits.pop() { Some(r) => r, None => 0 };
 
-        for x in 0..res_len {
+            let b_bit = match b.bits.pop() { Some(r) => r, None => 0 };
 
-            let a_byte = if x < a_len { self.bytes[x] } else { 0 };
+            let addition = carry + a_bit + b_bit;
 
-            let b_byte = if x < b_len { b.bytes[x] } else { 0 };
-
-            let s: u16 = a_byte as u16 + carry as u16 + b_byte as u16;
-
-            if s > 255 {
-                
-                res.bytes.push((s - 256) as u8); carry = 1;
-
-            } else {
-
-                res.bytes.push(s as u8); carry = 0;
-
+            match addition {
+                3 => { res.bits.push(1); carry = 1 },
+                2 => { res.bits.push(0); carry = 1 },
+                1 => { res.bits.push(1); carry = 0 },
+                _ => { res.bits.push(0); carry = 0 }
             }
 
         }
 
-        if carry == 1 { res.bytes.push(carry) }
+        if carry != 0 { res.bits.push(1) }
+
+        res.bits.reverse();
 
         res
 
     }
 
-    pub fn sub(mut self, b: &Int) -> Result<Self, Box<dyn Error>> {
+    pub fn sub(mut self, mut b: Int) -> Result<Self, Box<dyn Error>> {
 
-        match &self.clone().cmp(b)[..] {
+        match &self.clone().cmp(&b)[..] {
             
             "greater" => {
 
-                let mut res = Int { bytes: vec![] };
+                let mut res = Int { bits: vec![] };
 
-                for x in 0..self.bytes.len() {
+                while self.bits.len() > 0 || b.bits.len() > 0 {
 
-                    let a_byte = self.bytes[x] as u16;
+                    let a_bit = match self.bits.pop() { Some(r) => r, None => 0 };
 
-                    let b_byte = b.bytes[x] as u16;
+                    let b_bit = match b.bits.pop() { Some(r) => r, None => 0 };
 
-                    if b_byte > a_byte {
+                    if b_bit > a_bit {
 
                         let mut borrowed: bool = false;
-
-                        let mut borrow_index = x + 1;
+                        
+                        let mut borrow_index = self.bits.len() - 1;
 
                         while !borrowed {
 
-                            if self.bytes[borrow_index] > 0 {
+                            if self.bits[borrow_index] > 0 { self.bits[borrow_index] = 0; borrowed = true; }
+                            
+                            else { borrow_index -= 1 }
 
-                                self.bytes[borrow_index] -= 1;
-
-                                borrowed = true;
-
-                            } else {
-
-                                borrow_index += 1;
-
-                            }
                         }
-                        
-                        let diff = ((256 + a_byte) - b_byte) as u8;
 
-                        res.bytes.push(diff);
+                        let diff = 2 - b_bit;
+
+                        res.bits.push(diff);
 
                     } else {
 
-                        let diff = (a_byte - b_byte) as u8;
+                        let diff = a_bit - b_bit;
 
-                        res.bytes.push(diff);
+                        res.bits.push(diff);
 
                     }
 
                 }
 
-                while res.bytes[res.bytes.len() - 1] == 0 {
+                res.bits.reverse();
 
-                    res.bytes.remove(res.bytes.len() - 1);
-                    
-                }
-            
+                while res.bits[0] == 0 { res.bits.remove(0); };
+
                 Ok(res)
 
             },
@@ -124,15 +109,55 @@ impl Int {
 
     }
 
-    pub fn mul() {}
+    pub fn mul(self, b: &Int) -> Self {
 
-    pub fn div() {}
+        let mut res: Int = self.clone();
 
-    pub fn rem() {}
+        b.bits
+            .iter()
+            .skip(1)
+            .for_each(|&x| {
 
-    pub fn pow(self, _p: &Int) -> Self {
-        self
+                res = res.clone().add(res.clone());
+                
+                if x == 1 { res = res.clone().add(self.clone()) }
+            
+            });
+
+        res
+
     }
+
+    // pub fn divide(self, d: &Int) -> Result<Self, Box<dyn Error>> {
+    //     Ok(self)
+    // }
+
+    // pub fn modulo(self, n: &Int) -> Self {
+    //     self
+    // }
+
+    // pub fn power(self, _p: &Int) -> Self {
+    //     self
+    // }
+
+    // pub fn modular_inverse(self, m: &Int) -> Self {
+
+    //     let modulus = m;
+        
+    //     let t1 = Int::from_str("1", 10).unwrap();
+    //     let t2 = Int::from_str("0", 10).unwrap();
+
+    //     let residue = self.modulo(&m);
+
+    //     let high = m;
+
+    //     while &residue.clone().cmp(&Int::from_str("1", 10).unwrap()) == "greater" {
+
+    //         let ratio = high.clone().divide(&residue).unwrap();
+    //     }
+
+    //     self
+    // }
 
     // string conversion functions
 
@@ -141,7 +166,7 @@ impl Int {
         match r {
             10 => {
                 let b = base10::from(s)?;
-                Ok(Self { bytes: b })
+                Ok(Self { bits: b })
             },
             _ => Err(Box::new(CustomError("base unsupported!".into())))
         }
@@ -151,9 +176,15 @@ impl Int {
     pub fn to_str(self, r: u8) -> Result<String, Box<dyn Error>> {
         
         match r {
+            
             2 => {
-                let s = base2::to_str(self.bytes);
-                Ok(s)
+
+                let mut res: String = String::with_capacity(self.bits.len());
+    
+                for bit in self.bits { res.push_str(&bit.to_string()) }
+
+                Ok(res)
+
             },
             _ => Err(Box::new(CustomError("base unsupported".into())))
         }
@@ -164,9 +195,9 @@ impl Int {
 
     pub fn cmp(self, b: &Int) -> String {
 
-        let a_len = self.bytes.len();
+        let a_len = self.bits.len();
 
-        let b_len = b.bytes.len();
+        let b_len = b.bits.len();
 
         if a_len > b_len {
             return "greater".to_string()
@@ -176,10 +207,10 @@ impl Int {
         
         } else {
 
-            if self.bytes[a_len - 1] > b.bytes[b_len - 1] {
+            if self.bits[0] > b.bits[0] {
                 return "greater".to_string()
 
-            } else if self.bytes[a_len - 1] < b.bytes[b_len - 1] {
+            } else if self.bits[0] < b.bits[0] {
                 return "lesser".to_string()
                 
             } else {
