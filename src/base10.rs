@@ -19,6 +19,8 @@ pub fn from(s: &str) -> Result<Vec<u8>, Box<dyn Error>> {
 
     res.reverse();
 
+    if res == vec![] { res = vec![0] }
+
     Ok(res)
 
 }

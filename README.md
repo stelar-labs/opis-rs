@@ -4,14 +4,16 @@ Opis is an arithmetic library for positive integers of any size written in Rust.
 ## Usage
 
 In Cargo.toml
+
 ```
 
 [dependencies]
-opis = "0.6.0"
+opis = "0.7.0"
 
 ```
 
 In your rust file
+
 ```
 
 use opis::Int;
@@ -20,23 +22,25 @@ use opis::Int;
 
 ## Features
 - Representation of integers of any length.
-- Integer bits are stored in big endian bit order.
+- Integer bits are stored in big endian order.
 - There are three groups of functions: conversion, arithmetic & comparison
 - Conversion functions support base 2, 10 & 16.
-- Arithmetic functions are addition, subtration, multiplication, division & remainder.
+- Arithmetic functions are addition, subtration, multiplication, division, remainder & exponentiation.
 - Comparision function checks between integers a and b if a is greater, lesser or equal to b.
 
-## Conversion Functions
+## API
 
-### From Str
+### Conversion Functions
 
-```
-
-let integer: Int = Int::from_str("6747", 10);
+#### From Str
 
 ```
 
-### To Str
+let integer: Int = Int::from_str("6747", 10)?;
+
+```
+
+#### To Str
 
 ```
 
@@ -44,32 +48,56 @@ let binary_str: String = integer.to_str(2);
 
 ```
 
-## Arithmetic Functions
+### Arithmetic Functions
 
-### Add
-
-```
-
-let sum: Int = int1.add(int2);
+#### Addition(add)
 
 ```
 
-### Sub
+let s = int1.add(&int2);
 
 ```
 
-let diff: Int = int1.sub(int2)?;
+#### Subtraction(sub)
 
 ```
 
-### Mul
-```
-
-let mul: Int = int1.mul(int2);
+let d = int1.sub(&int2).unwrap();
 
 ```
 
-## Comparison Function
+#### Multiplication(mul)
+```
+
+let p = int1.mul(&int2);
+
+```
+
+#### Division(div)
+
+```
+
+let q = int1.div(&int2);
+
+```
+
+#### Remainder(rem)
+
+```
+
+let r = int1.rem(&int2);
+
+```
+
+#### Exponentiation(pow)
+
+```
+
+let p = int1.pow(&int2);
+
+```
+
+### Comparison Function
 
 ```
 
@@ -82,13 +110,12 @@ match &int1.cmp(&int2)[..] {
 
 ```
 
+## Performance
+
 ## Future Topics
-- Division
-- Remainder
 - Full Base2, Base10 & Base16 conversion support
 
 ## Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2021-10-22
-
+2021-10-29

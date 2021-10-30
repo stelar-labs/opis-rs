@@ -4,6 +4,13 @@ use std::fmt;
 
 mod base10;
 
+mod addition;
+mod subtraction;
+mod multiplication;
+mod division;
+mod exponentiation;
+mod comparison;
+
 #[derive(Clone, Debug)]
 pub struct Int { pub bits: Vec<u8> }
 
@@ -20,125 +27,79 @@ impl Error for CustomError {}
 
 impl Int {
 
-    pub fn add(mut self, mut b: Int) -> Self {
+    pub fn add(self, b: &Int) -> Self {
 
-        let mut res = Int { bits: vec![] };
-
-        let mut carry = 0;
-
-        while self.bits.len() > 0 || b.bits.len() > 0 {
-
-            let a_bit = match self.bits.pop() { Some(r) => r, None => 0 };
-
-            let b_bit = match b.bits.pop() { Some(r) => r, None => 0 };
-
-            let addition = carry + a_bit + b_bit;
-
-            match addition {
-                3 => { res.bits.push(1); carry = 1 },
-                2 => { res.bits.push(0); carry = 1 },
-                1 => { res.bits.push(1); carry = 0 },
-                _ => { res.bits.push(0); carry = 0 }
-            }
-
-        }
-
-        if carry != 0 { res.bits.push(1) }
-
-        res.bits.reverse();
-
-        res
+        addition::run(self, b.to_owned())
 
     }
 
-    pub fn sub(mut self, mut b: Int) -> Result<Self, Box<dyn Error>> {
+    pub fn sub(self, b: &Int) -> Result<Self, Box<dyn Error>> {
 
-        match &self.clone().cmp(&b)[..] {
-            
-            "greater" => {
-
-                let mut res = Int { bits: vec![] };
-
-                while self.bits.len() > 0 || b.bits.len() > 0 {
-
-                    let a_bit = match self.bits.pop() { Some(r) => r, None => 0 };
-
-                    let b_bit = match b.bits.pop() { Some(r) => r, None => 0 };
-
-                    if b_bit > a_bit {
-
-                        let mut borrowed: bool = false;
-                        
-                        let mut borrow_index = self.bits.len() - 1;
-
-                        while !borrowed {
-
-                            if self.bits[borrow_index] > 0 { self.bits[borrow_index] = 0; borrowed = true; }
-                            
-                            else { borrow_index -= 1 }
-
-                        }
-
-                        let diff = 2 - b_bit;
-
-                        res.bits.push(diff);
-
-                    } else {
-
-                        let diff = a_bit - b_bit;
-
-                        res.bits.push(diff);
-
-                    }
-
-                }
-
-                res.bits.reverse();
-
-                while res.bits[0] == 0 { res.bits.remove(0); };
-
-                Ok(res)
-
-            },
-
-            _ => {
-                Err(Box::new(CustomError("b is greater than a!".into())))
-            }
-
-        }
+        subtraction::run(self, b.to_owned())
 
     }
 
     pub fn mul(self, b: &Int) -> Self {
 
-        let mut res: Int = self.clone();
-
-        b.bits
-            .iter()
-            .skip(1)
-            .for_each(|&x| {
-
-                res = res.clone().add(res.clone());
-                
-                if x == 1 { res = res.clone().add(self.clone()) }
-            
-            });
-
-        res
+        multiplication::run(self, b)
 
     }
 
-    // pub fn divide(self, d: &Int) -> Result<Self, Box<dyn Error>> {
-    //     Ok(self)
-    // }
+    pub fn div(self, b: &Int) -> Result<Self, Box<dyn Error>> {
 
-    // pub fn modulo(self, n: &Int) -> Self {
-    //     self
-    // }
+        let zero = Int {
+            bits: vec![0]
+        };
 
-    // pub fn power(self, _p: &Int) -> Self {
-    //     self
-    // }
+        if self.bits == zero.bits {
+
+            Ok(zero)
+
+        } else if b.bits == vec![0] {
+
+            Err(Box::new(CustomError("a/0 is undefined! ".into())))
+    
+        } else {
+
+            let (q, _) = division::run(self, b);
+            
+            Ok(q)
+
+        }
+
+    }
+
+    pub fn rem(self, b: &Int) -> Result<Self, Box<dyn Error>> {
+
+        let zero = Int {
+            bits: vec![0]
+        };
+
+        if self.bits == zero.bits {
+
+            Ok(zero)
+
+        } else if b.bits == vec![0] {
+
+            Err(Box::new(CustomError("a/0 is undefined! ".into())))
+    
+        } else {
+
+            let (_, r) = division::run(self, b);
+
+            Ok(r)
+
+        }
+
+        
+
+    }
+
+    pub fn pow(self, b: &Int) -> Self {
+
+        exponentiation::run(self, b)
+
+    }
 
     // pub fn modular_inverse(self, m: &Int) -> Self {
 
@@ -159,16 +120,24 @@ impl Int {
     //     self
     // }
 
-    // string conversion functions
-
     pub fn from_str(s: &str, r: u8) -> Result<Self, Box<dyn Error>> {
 
         match r {
+            
             10 => {
+
                 let b = base10::from(s)?;
-                Ok(Self { bits: b })
+
+                let res = Int {
+                    bits: b
+                };
+
+                Ok(res)
+
             },
-            _ => Err(Box::new(CustomError("base unsupported!".into())))
+
+            _ => Err(Box::new(CustomError("unsupported radix!".into())))
+
         }
 
     }
@@ -181,43 +150,19 @@ impl Int {
 
                 let mut res: String = String::with_capacity(self.bits.len());
     
-                for bit in self.bits { res.push_str(&bit.to_string()) }
+                for bit in self.bits { res.push_str(&bit.to_string()); };
 
                 Ok(res)
 
             },
-            _ => Err(Box::new(CustomError("base unsupported".into())))
+            _ => Err(Box::new(CustomError("unsupported radix!".into())))
         }
 
     }
 
-    // comparison function
-
     pub fn cmp(self, b: &Int) -> String {
 
-        let a_len = self.bits.len();
-
-        let b_len = b.bits.len();
-
-        if a_len > b_len {
-            return "greater".to_string()
-
-        } else if a_len < b_len { 
-            return "lesser".to_string()
-        
-        } else {
-
-            if self.bits[0] > b.bits[0] {
-                return "greater".to_string()
-
-            } else if self.bits[0] < b.bits[0] {
-                return "lesser".to_string()
-                
-            } else {
-                return "equal".to_string()
-
-            }
-        }
+        comparison::run(self, b.to_owned())
 
     }
 
