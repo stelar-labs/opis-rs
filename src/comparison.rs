@@ -2,8 +2,6 @@
 use crate::Int;
 
 pub fn run(mut a: Int, mut b: Int) -> String {
-    
-    let mut res = String::new();
 
     let a_len = a.bits.len();
 
@@ -11,42 +9,32 @@ pub fn run(mut a: Int, mut b: Int) -> String {
 
     if a_len > b_len {
         
-        res = "greater".to_string()
+        return "greater".to_string()
 
     } else if a_len < b_len { 
         
-        res = "less".to_string()
+        return "less".to_string()
     
     } else {
 
-        if  a.bits == b.bits {
+        while a.bits[0] == b.bits[0] {
+            
+            a.bits.remove(0);
+            
+            b.bits.remove(0);
+        
+        }
 
-            res = "equal".to_string()
+        if a.bits[0] == 1 {
+
+            return "greater".to_string();
 
         } else {
-
-            while a.bits[0] == b.bits[0] {
-                
-                a.bits.remove(0);
-                
-                b.bits.remove(0);
             
-            }
-
-            if a.bits[0] == 1 {
-
-                res = "greater".to_string();
-
-            } else {
-                
-                res = "less".to_string();
-            
-            }
-
+            return "less".to_string();
+        
         }
 
     }
-
-    res
 
 }

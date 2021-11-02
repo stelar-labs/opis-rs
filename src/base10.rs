@@ -19,7 +19,11 @@ pub fn from(s: &str) -> Result<Vec<u8>, Box<dyn Error>> {
 
     res.reverse();
 
-    if res == vec![] { res = vec![0] }
+    if res.is_empty() {
+        
+        res = vec![0]
+    
+    }
 
     Ok(res)
 
@@ -53,7 +57,11 @@ fn half(s: &str) -> (String, u8) {
 
             } else {
             
-                if d != 0 { res.push_str(&d.to_string()) }
+                if d != 0 {
+                    
+                    res.push_str(&d.to_string())
+                
+                }
 
             }
 

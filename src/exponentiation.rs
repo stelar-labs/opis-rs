@@ -3,33 +3,29 @@ use crate::Int;
 
 pub fn run(a: Int, b: &Int) -> Int {
 
-    let zero = Int {
-        bits: vec![0]
-    };
+    if a.bits == vec![0] {
 
-    if a.bits == zero.bits {
+        Int::zero()
 
-        zero
+    } else if b.bits == vec![0] {
 
-    } else if b.bits == zero.bits {
-
-        Int {
-            bits: vec![1]
-        }
+        Int::one()
 
     } else {
 
-        let mut res: Int = a.clone();
+        let mut res: Int = a.to_owned();
 
         b.bits
             .iter()
             .skip(1)
             .for_each(|&x| {
 
-                res = res.clone().mul(&res);
+                res = res.to_owned().mul(&res);
                 
                 if x == 1 {
-                    res = res.clone().mul(&a)
+
+                    res = res.to_owned().mul(&a)
+                
                 }
             
             });

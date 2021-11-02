@@ -3,19 +3,21 @@ use crate::Int;
 
 pub fn run(a: Int, b: &Int) -> (Int, Int) {
 
-    let mut q = Int {
-        bits: vec![]
-    };
+    let mut q = Int::zero();
 
-    let mut r = Int {
-        bits: vec![]
-    };
+    let mut r = Int::zero();
 
     a.bits
         .iter()
         .for_each(|&x| {
 
             r.bits.push(x);
+
+            while r.bits.len() > 1 && r.bits[0] == 0 {
+    
+                r.bits.remove(0);
+            
+            };
 
             match &r.clone().cmp(&b)[..] {
                 
@@ -25,7 +27,7 @@ pub fn run(a: Int, b: &Int) -> (Int, Int) {
                     
                     q.bits.push(1);
                     
-                    r = r.clone().sub(&b).unwrap();
+                    r = r.clone().sub(&b)
                 
                 }
 

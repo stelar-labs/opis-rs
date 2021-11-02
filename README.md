@@ -1,5 +1,5 @@
 # Opis Rust
-Opis is an arithmetic library for positive integers of any size written in Rust.
+Opis is an arithmetic library for rational numbers written in Rust.
 
 ## Usage
 
@@ -8,7 +8,7 @@ In Cargo.toml
 ```
 
 [dependencies]
-opis = "0.7.0"
+opis = "0.8.0"
 
 ```
 
@@ -24,8 +24,8 @@ use opis::Int;
 - Representation of integers of any length.
 - Integer bits are stored in big endian order.
 - There are three groups of functions: conversion, arithmetic & comparison
-- Conversion functions support base 2, 10 & 16.
-- Arithmetic functions are addition, subtration, multiplication, division, remainder & exponentiation.
+- Conversion functions support radix 2, 10 & 16.
+- Arithmetic functions are addition, subtration, multiplication, division, remainder, modulo, exponentiation & modular inverse.
 - Comparision function checks between integers a and b if a is greater, lesser or equal to b.
 
 ## API
@@ -54,7 +54,7 @@ let binary_str: String = integer.to_str(2);
 
 ```
 
-let s = int1.add(&int2);
+let s = int_a.add(&int2_b);
 
 ```
 
@@ -62,14 +62,14 @@ let s = int1.add(&int2);
 
 ```
 
-let d = int1.sub(&int2).unwrap();
+let d = int_a.sub(&int_b).unwrap();
 
 ```
 
 #### Multiplication(mul)
 ```
 
-let p = int1.mul(&int2);
+let p = int_a.mul(&int_b);
 
 ```
 
@@ -77,7 +77,7 @@ let p = int1.mul(&int2);
 
 ```
 
-let q = int1.div(&int2);
+let q = int_a.div(&int_b).unwrap();
 
 ```
 
@@ -85,7 +85,15 @@ let q = int1.div(&int2);
 
 ```
 
-let r = int1.rem(&int2);
+let r = int_a.rem(&int_b).unwrap();
+
+```
+
+#### Modulo(modulo)
+
+```
+
+let m = int_a.modulo(&int_b).unwrap();
 
 ```
 
@@ -93,7 +101,15 @@ let r = int1.rem(&int2);
 
 ```
 
-let p = int1.pow(&int2);
+let p = int_a.pow(&int_e);
+
+```
+
+#### Modular Inverse(mod_inv)
+
+```
+
+let mi = int_a.mod_inv(&int_m);
 
 ```
 
@@ -103,7 +119,7 @@ let p = int1.pow(&int2);
 
 match &int1.cmp(&int2)[..] {
     "greater" => Println!("a is greater than b!"),
-    "lesser" => Println!("a is lesser than b!"),
+    "less" => Println!("a is less than b!"),
     "equal" => Println!("a is equal to b!"),
     _ => Println!("no match!"),
 }
@@ -112,10 +128,10 @@ match &int1.cmp(&int2)[..] {
 
 ## Performance
 
-## Future Topics
+## Future
 - Full Base2, Base10 & Base16 conversion support
 
 ## Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2021-10-29
+2021-11-2
