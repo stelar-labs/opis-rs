@@ -1,5 +1,5 @@
 # Opis Rust
-Opis is an arithmetic library for rational numbers written in Rust.
+Opis is an arithmetic library for integer numbers written in Rust.
 
 ## Usage
 
@@ -8,7 +8,7 @@ In Cargo.toml
 ```
 
 [dependencies]
-opis = "0.8.0"
+opis = "0.9.0"
 
 ```
 
@@ -128,8 +128,9 @@ match &int1.cmp(&int2)[..] {
 
 ## Performance
 
-## Future
+## Version 1 Requirements
 - Full Base2, Base10 & Base16 conversion support
+- Improved Comparison API
 
 ## Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.

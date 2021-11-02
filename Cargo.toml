@@ -1,9 +1,9 @@
 [package]
 name = "opis"
-version = "0.8.0"
+version = "0.9.0"
 edition = "2018"
 license = "MIT"
-description = "Opis is an arithmetic library for rational numbers written in Rust."
+description = "Opis is an arithmetic library for integer numbers written in Rust."
 repository = "https://github.com/seg-software/rust-opis"
 readme = "README.md"
 
