@@ -29,6 +29,138 @@ pub fn from(s: &str) -> Result<Vec<u8>, Box<dyn Error>> {
 
 }
 
+pub fn to(bits: Vec<u8>) -> String {
+
+    let mut current_number: String = "0".to_string();
+
+    for b in bits {
+
+        current_number = double(&current_number);
+
+        if b == 1 {
+
+            current_number = add_one(&current_number);
+
+        }
+
+    }
+
+    current_number
+
+}
+
+fn double(s: &str) -> String {
+
+    let mut split: Vec<_> = s.split("").collect();
+    
+    split.retain(|&x| x != "");
+
+    split.reverse();
+
+    let mut carry: u8 = 0;
+
+    let mut current_number: Vec<u8> = Vec::new();
+
+    for i in split {
+
+        let mut res: u8 = carry;
+
+        let n: u8 = u8::from_str_radix(&i, 10).unwrap();
+
+        let d: u8 = n * 2;
+
+        if d > 9 {
+
+            res += d - 10;
+
+            carry = 1;
+
+        } else {
+
+            res += d;
+
+            carry = 0;
+
+        }
+
+        current_number.push(res)
+
+    }
+
+    if carry == 1 {
+
+        current_number.push(1)
+    
+    }
+
+    current_number.reverse();
+
+    let num_str: String = current_number
+    .iter()
+    .fold(
+        String::new(),
+        |acc, x|
+        format!("{}{}", acc, x)
+    );
+
+    num_str
+
+}
+
+fn add_one(s: &str) -> String {
+
+    let mut split: Vec<_> = s.split("").collect();
+    
+    split.retain(|&x| x != "");
+
+    split.reverse();
+
+    let mut carry: u8 = 1;
+
+    let mut current_number: Vec<u8> = Vec::new();
+
+    for i in split {
+
+        let n: u8 = u8::from_str_radix(&i, 10).unwrap();
+
+        let mut sum: u8 = carry + n;
+
+        if sum == 10 {
+
+            sum = 0;
+
+            carry = 1;
+
+        } else {
+
+            carry = 0;
+
+        }
+
+        current_number.push(sum)
+
+    }
+
+    if carry == 1 {
+
+        current_number.push(1)
+    
+    }
+
+    current_number.reverse();
+
+    let num_str: String = current_number
+    .iter()
+    .fold(
+        String::new(),
+        |acc, x|
+        format!("{}{}", acc, x)
+    );
+
+    num_str
+
+}
+
 fn half(s: &str) -> (String, u8) {
 
     let mut split: Vec<_> = s.split("").collect();

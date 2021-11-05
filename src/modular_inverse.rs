@@ -11,7 +11,7 @@ pub fn run(mut a: Int, m: &Int) -> Int {
     
     a = a.modulo(m).unwrap();
 
-    while &a.to_owned().cmp(&Int::one()) == "greater" {
+    while a.to_owned().is_greater(&Int::one()) {
 
         let ratio = modulus.to_owned().div(&a).unwrap();
 

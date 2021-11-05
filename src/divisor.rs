@@ -19,17 +19,15 @@ pub fn run(a: Int, b: &Int) -> (Int, Int) {
             
             };
 
-            match &r.clone().cmp(&b)[..] {
+            if r.to_owned().is_less(&b) {
                 
-                "less" => q.bits.push(0),
+                q.bits.push(0)
 
-                _ => {
-                    
-                    q.bits.push(1);
-                    
-                    r = r.clone().sub(&b)
+            } else {
                 
-                }
+                q.bits.push(1);
+                
+                r = r.clone().sub(&b)
 
             };
 

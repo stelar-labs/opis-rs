@@ -3,6 +3,7 @@ use std::error::Error;
 use std::fmt;
 
 mod base10;
+mod base16;
 
 mod adder;
 mod subtractor;
@@ -77,7 +78,7 @@ impl Int {
 
         if !self.negative && !b.negative {
 
-            if &self.clone().cmp(&b)[..] == "greater" {
+            if self.to_owned().is_greater(&b) {
 
                 res.bits = subtractor::run(self.bits, b.bits);
 
@@ -247,9 +248,42 @@ impl Int {
 
         match r {
 
+            2 => {
+
+                let mut split: Vec<_> = s.split("").collect();
+    
+                split.retain(|&x| x != "");
+
+                let bits = split
+                    .iter()
+                    .map(|&x| u8::from_str_radix(x, 10).unwrap())
+                    .collect();
+
+                let res = Int {
+                    bits: bits,
+                    negative: false
+                };
+
+                Ok(res)
+
+            },
+
             10 => {
 
                 let b = base10::from(s)?;
+
+                let res = Int {
+                    bits: b,
+                    negative: false
+                };
+
+                Ok(res)
+
+            },
+
+            16 => {
+
+                let b = base16::from(s)?;
 
                 let res = Int {
                     bits: b,
@@ -284,44 +318,85 @@ impl Int {
 
             },
 
+            10 => Ok(base10::to(self.bits)),
+
+            16 => Ok(base16::to(self.bits)),
+
             _ => Err(Box::new(CustomError("unsupported radix!".into())))
 
         }
 
     }
 
-    pub fn cmp(self, b: &Int) -> String {
+    // comparison functions
 
-        if self.bits == b.bits && self.negative == b.negative {
+    pub fn is_greater(self, b: &Int) -> bool {
 
-            "equal".to_string()
-        
-        } else if self.negative && b.negative {
+        if &compare(self, b.to_owned()) == "greater" {
 
-            if &comparison::run(self, b.to_owned()) == "greater" {
-
-                "less".to_string()
-
-            } else {
-
-                "greater".to_string()
-
-            }
-
-        } else if self.negative {
-
-            "less".to_string()
-
-        } else if b.negative {
-
-            "greater".to_string()
+            true
 
         } else {
-            
-            comparison::run(self, b.to_owned())
+
+            false
 
         }
 
     }
+
+    pub fn is_less(self, b: &Int) -> bool {
+
+        if &compare(self, b.to_owned()) == "less" {
+
+            true
+
+        } else {
+
+            false
+
+        }
+
+    }
+
+    pub fn is_equal(self, b: &Int) -> bool {
+
+        if &compare(self, b.to_owned()) == "equal" {
+
+            true
+
+        } else {
+
+            false
+
+        }
+
+    }
+
+}
+
+fn compare(a: Int, b: Int) -> String {
+
+    if !a.negative && b.negative {
+            
+        "greater".to_string()
+    
+    } else if a.negative && !b.negative {
+
+        "less".to_string()
+
+    } else if !a.negative && !b.negative {
+
+        comparison::run(a, b)
+
+    } else {
+
+        match &comparison::run(a, b)[..] {
+            "greater" => "less".to_string(),
+            "less" => "greater".to_string(),
+            _ => "equal".to_string()
+        }
+
+    }
+
 
 }
