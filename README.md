@@ -1,9 +1,9 @@
-# Opis Rust
+## Rust Opis
 Opis is an arithmetic library for integer numbers written in Rust.
 
-## Usage
+### Usage
 
-In Cargo.toml
+In your `Cargo.toml`:
 
 ```
 
@@ -12,7 +12,7 @@ opis = "1.0.0"
 
 ```
 
-In your rust file
+In your Rust file:
 
 ```
 
@@ -20,7 +20,7 @@ use opis::Int;
 
 ```
 
-## Features
+### Features
 - Representation of integers of any length.
 - Integer bits are stored in big endian order.
 - There are three groups of functions: conversion, arithmetic & comparison
@@ -28,11 +28,11 @@ use opis::Int;
 - Arithmetic functions are addition, subtration, multiplication, division, remainder, modulo, exponentiation & modular inverse.
 - Comparision functions are is_greater, is_less and is_equal.
 
-## API
+### API
 
-### Conversion Functions
+#### Conversion Functions
 
-#### From Str
+From Str:
 
 ```
 
@@ -40,7 +40,7 @@ let integer: Int = Int::from_str("6747", 10)?;
 
 ```
 
-#### To Str
+To Str:
 
 ```
 
@@ -48,9 +48,9 @@ let binary_str: String = integer.to_str(2);
 
 ```
 
-### Arithmetic Functions
+#### Arithmetic Functions
 
-#### Addition(add)
+`Addition`
 
 ```
 
@@ -58,7 +58,7 @@ let s = int_a.add(&int2_b);
 
 ```
 
-#### Subtraction(sub)
+`Subtraction`
 
 ```
 
@@ -66,14 +66,15 @@ let d = int_a.sub(&int_b).unwrap();
 
 ```
 
-#### Multiplication(mul)
+`Multiplication`
+
 ```
 
 let p = int_a.mul(&int_b);
 
 ```
 
-#### Division(div)
+`Division`
 
 ```
 
@@ -81,7 +82,7 @@ let q = int_a.div(&int_b).unwrap();
 
 ```
 
-#### Remainder(rem)
+`Remainder`
 
 ```
 
@@ -89,7 +90,7 @@ let r = int_a.rem(&int_b).unwrap();
 
 ```
 
-#### Modulo(modulo)
+`Modulo`
 
 ```
 
@@ -97,7 +98,7 @@ let m = int_a.modulo(&int_b).unwrap();
 
 ```
 
-#### Exponentiation(pow)
+`Exponentiation`
 
 ```
 
@@ -105,7 +106,7 @@ let p = int_a.pow(&int_e);
 
 ```
 
-#### Modular Inverse(mod_inv)
+`Modular Inverse`
 
 ```
 
@@ -113,7 +114,7 @@ let mi = int_a.mod_inv(&int_m);
 
 ```
 
-### Comparison Functions
+#### Comparison Functions
 
 ```
 
@@ -125,13 +126,10 @@ let ans_3: bool = int_a.is_equal(&int_b);
 
 ```
 
-## Performance
-N/A
-
-## Future
+### Future
 - Benchmarking Performance
 
-## Contribution
+### Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2021-11-05
+2021-12-09
