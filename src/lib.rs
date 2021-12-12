@@ -333,13 +333,13 @@ impl Int {
     pub fn is_greater(self, b: &Int) -> bool {
 
         if &compare(self, b.to_owned()) == "greater" {
-
+            
             true
-
+        
         } else {
-
+            
             false
-
+        
         }
 
     }
@@ -369,6 +369,105 @@ impl Int {
             false
 
         }
+
+    }
+
+    // bitwise functions
+    pub fn not(mut self) -> Self {
+
+        self.bits = self.bits.iter()
+            .map(|x| { match x { 1 => 0, _ => 1 } })
+            .collect();
+
+        self
+        
+    }
+
+    pub fn and(self, y: &Int) -> Self {
+
+        let mut x_bits: Vec<u8> = self.bits;
+
+        let mut y_bits: Vec<u8> = y.bits.clone();
+
+        let mut and_bits: Vec<u8> = Vec::new();
+
+        while x_bits.len() > 0 || y_bits.len() > 0 {
+
+            let x_bit = match x_bits.pop() { Some(r) => r, None => 0 };
+    
+            let y_bit = match y_bits.pop() { Some(r) => r, None => 0 };
+
+            let and_bit = match (x_bit, y_bit) { (1, 1) => 1, _ => 0 };
+
+            and_bits.push(and_bit)
+
+        }
+
+        and_bits.reverse();
+
+        let res = Int { bits: and_bits, negative: false };
+
+        res
+
+    }
+
+    pub fn or(self, y: &Int) -> Self {
+        
+        let mut x_bits: Vec<u8> = self.bits;
+
+        let mut y_bits: Vec<u8> = y.bits.clone();
+
+        let mut or_bits: Vec<u8> = Vec::new();
+
+        while x_bits.len() > 0 || y_bits.len() > 0 {
+
+            let x_bit = match x_bits.pop() { Some(r) => r, None => 0 };
+    
+            let y_bit = match y_bits.pop() { Some(r) => r, None => 0 };
+
+            let or_bit = match (x_bit, y_bit) { (0, 0) => 0, _ => 1 };
+
+            or_bits.push(or_bit)
+
+        }
+
+        or_bits.reverse();
+
+        let res = Int { bits: or_bits, negative: false };
+
+        res
+
+    }
+
+    pub fn xor(self, y: &Int) -> Self {
+        
+        let mut x_bits: Vec<u8> = self.bits;
+
+        let mut y_bits: Vec<u8> = y.bits.clone();
+
+        let mut xor_bits: Vec<u8> = Vec::new();
+
+        while x_bits.len() > 0 || y_bits.len() > 0 {
+
+            let x_bit = match x_bits.pop() { Some(r) => r, None => 0 };
+    
+            let y_bit = match y_bits.pop() { Some(r) => r, None => 0 };
+
+            let xor_bit = match (x_bit, y_bit) {
+                (0, 1) => 1,
+                (1, 0) => 1,
+                _ => 0
+            };
+
+            xor_bits.push(xor_bit)
+
+        }
+
+        xor_bits.reverse();
+
+        let res = Int { bits: xor_bits, negative: false };
+
+        res
 
     }
 
