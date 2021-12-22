@@ -244,6 +244,8 @@ impl Int {
 
     }
 
+    // conversion functions 
+
     pub fn from_str(s: &str, r: u8) -> Result<Self, Box<dyn Error>> {
 
         match r {
@@ -325,6 +327,86 @@ impl Int {
             _ => Err(Box::new(CustomError("unsupported radix!".into())))
 
         }
+
+    }
+
+    pub fn from_bytes(bytes: &Vec<u8>) -> Int {
+
+        let mut res = Int {
+            negative: false,
+            bits: Vec::new()
+        };
+
+        let bin_str: String = bytes
+            .iter()
+            .fold(
+                String::new(), |acc, x| {
+                    let mut new = acc;
+                    new.push_str(&format!("{:08b}", x));
+                    new
+                }
+            );
+
+        for i in bin_str.chars() {
+
+            res.bits.push(u8::from_str_radix(&i.to_string(), 2).unwrap())
+
+        }
+
+        while res.bits[0] == 0 {
+
+            if res.bits.len() > 1 {
+                
+                res.bits.remove(0);
+
+            }
+
+        }
+
+        res
+
+    }
+
+    pub fn to_bytes(mut self) -> Vec<u8> {
+
+        let mut res: Vec<u8> = Vec::new();
+
+        while !self.bits.is_empty() {
+
+            let mut byte_bits: Vec<u8> = Vec::new();
+
+            while byte_bits.len() != 8 {
+
+                match self.bits.pop() {
+
+                    Some(r) => byte_bits.push(r),
+                    
+                    None => break
+
+                }
+
+            }
+
+            byte_bits.reverse();
+
+            let byte_str = byte_bits
+                .iter()
+                .fold(
+                    String::new(), |acc, x| {
+                        let mut new = acc;
+                        new.push_str(&format!("{}", x));
+                        new
+                    }
+                );
+
+            res.push(u8::from_str_radix(&byte_str, 2).unwrap())
+
+        }
+
+        res.reverse();
+
+        res
+
 
     }
 
