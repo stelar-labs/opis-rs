@@ -1,10 +1,10 @@
 [package]
 name = "opis"
-version = "1.2.0"
+version = "2.0.0"
 edition = "2018"
 license = "MIT"
 description = "Opis is an arithmetic library for integer numbers written in Rust."
-repository = "https://github.com/seg-software/rust-opis"
+repository = "https://github.com/stelar-software/rust-opis"
 readme = "README.md"
 
 [dependencies]

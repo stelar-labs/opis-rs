@@ -1,330 +1,136 @@
-
-use std::error::Error;
-use std::fmt;
+use std::cmp::Ordering;
+use std::ops::{Add, AddAssign, Sub, SubAssign, Mul, Div, Rem, Not, BitAnd, BitOr, BitXor};
 
 mod base10;
-mod base16;
-
-mod adder;
-mod subtractor;
-mod multiplier;
-mod divisor;
-mod exponentiation;
-mod modular_inverse;
-mod comparison;
 
 #[derive(Clone, Debug)]
 pub struct Int {
     pub bits: Vec<u8>,
-    pub negative: bool
+    pub sign: bool
 }
-
-#[derive(Debug)]
-struct CustomError(String);
-
-impl fmt::Display for CustomError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Opis Error: {}", self.0)
-    }
-}
-
-impl Error for CustomError {}
 
 impl Int {
 
-    pub fn zero() -> Self { Int { bits: vec![0], negative: false } }
+    pub fn zero() -> Self { Int{bits: vec![0], sign: false} }
 
-    pub fn one() -> Self { Int { bits: vec![1], negative: false } }
+    pub fn one() -> Self { Int{bits: vec![1], sign: false} }
 
-    pub fn add(mut self, n: &Int) -> Self {
-
-        let mut b = n.to_owned();
-
-        let mut res = Int::zero();
-
-        if !self.negative && !b.negative {
-
-            res.bits = adder::run(self.bits, b.bits)
-
-        } else if self.negative && b.negative {
-
-            res.bits = adder::run(self.bits, b.bits);
-
-            res.negative = true
-            
-        } else if self.negative {
-
-            self.negative = false;
-
-            res = b.sub(&self)
-
-        } else {
-
-            b.negative = false;
-
-            res = self.sub(&b)
-
-        }
-
-        res
-
-    }
-
-    pub fn sub(self, n: &Int) -> Self {
-
-        let mut b = n.to_owned();
-
-        let mut res = Int::zero();
-
-        if !self.negative && !b.negative {
-
-            if self.to_owned().is_greater(&b) {
-
-                res.bits = subtractor::run(self.bits, b.bits);
-
-            } else {
-
-                res.bits = subtractor::run(b.bits, self.bits);
-
-                res.negative = true
-
-            }
-        
-        } else if self.negative && b.negative {
-
-            b.negative = false;
-
-            res = self.add(&b)
-
-        } else if self.negative {
-
-            b.negative = true;
-
-            res = self.add(&b)
-
-        } else {
-
-            b.negative = false;
-
-            res = self.add(&b)
-
-        }
-
-        res
-
-    }
-
-    pub fn mul(self, b: &Int) -> Self {
-
-        let mut res = Int::zero();
-
-        if self.bits != vec![0] && b.bits != vec![0] {
-            
-            res.bits = multiplier::run(self.bits, b.to_owned().bits);
-
-            match(self.negative, b.negative) {
-                (false, true) => res.negative = true,
-                (true, false) => res.negative = true,
-                _ => ()
-            }
-
-        }
-
-        res
-
-    }
-
-    pub fn div(self, b: &Int) -> Result<Self, Box<dyn Error>> {
-
-        let mut res = Int::zero();
-
-        if self.bits == vec![0] {
-
-            Ok(res)
-
-        } else if b.bits == vec![0] {
-
-            Err(Box::new(CustomError("a/0 is undefined! ".into())))
-    
-        } else {
-
-            let (q, _) = divisor::run(self.to_owned(), b);
-            
-            res = q;
-
-            match(self.negative, b.negative) {
-                (false, true) => res.negative = true,
-                (true, false) => res.negative = true,
-                _ => ()
-            }
-
-            Ok(res)
-
-        }
-
-    }
-
-    pub fn rem(self, b: &Int) -> Result<Self, Box<dyn Error>> {
-
-        if self.bits == vec![0] {
-
-            Ok(Int::zero())
-
-        } else if b.bits == vec![0] {
-
-            Err(Box::new(CustomError("a/0 is undefined! ".into())))
-    
-        } else {
-
-            let (_, r) = divisor::run(self.to_owned(), b);
-
-            let mut res = r;
-
-            if self.negative {
-
-                res.negative = true
-
-            }
-
-            Ok(res)
-
-        }   
-
-    }
-
-    pub fn modulo(self, b: &Int) -> Result<Self, Box<dyn Error>> {
-
-        if self.bits == vec![0] {
-
-            Ok(Int::zero())
-
-        } else if b.bits == vec![0] {
-
-            Err(Box::new(CustomError("a/0 is undefined! ".into())))
-    
-        } else {
-
-            let r = self.rem(&b)?;
-
-            if r.negative {
-
-                let r_plus_b = r.add(b);
-
-                let res = r_plus_b.rem(b).unwrap();
-
-                Ok(res)
-
-            } else {
-
-                Ok(r)
-
-            }
-
-        }   
-
-    }
-
-    pub fn pow(self, b: &Int) -> Self {
-
-        exponentiation::run(self, b)
-
-    }
-
-    pub fn mod_inv(self, m: &Int) -> Self {
-
-        if self.bits == vec![0] || m.bits == vec![0] {
-
-            Int::zero()
-
-        } else {
-
-            modular_inverse::run(self, m)
-
-        }
-
-    }
-
-    // conversion functions 
-
-    pub fn from_str(s: &str, r: u8) -> Result<Self, Box<dyn Error>> {
+    pub fn from_str(s: &str, r: u8) -> Self {
 
         match r {
 
             2 => {
 
-                let mut split: Vec<_> = s.split("").collect();
+                let mut split_str: Vec<_> = s.split("").collect();
     
-                split.retain(|&x| x != "");
+                split_str.retain(|&x| x != "");
 
-                let bits = split
+                let bits = split_str
                     .iter()
-                    .map(|&x| u8::from_str_radix(x, 10).unwrap())
+                    .skip(2)
+                    .map(|&x| u8::from_str_radix(x, 2).unwrap())
                     .collect();
 
-                let res = Int {
-                    bits: bits,
-                    negative: false
-                };
-
-                Ok(res)
+                Int {bits: bits, sign: false}
 
             },
 
             10 => {
 
-                let b = base10::from(s)?;
+                let b = base10::from(s).unwrap();
 
-                let res = Int {
-                    bits: b,
-                    negative: false
-                };
-
-                Ok(res)
+                Int {bits: b, sign: false}
 
             },
 
             16 => {
 
-                let b = base16::from(s)?;
+                let mut res: Vec<u8> = vec![];
 
-                let res = Int {
-                    bits: b,
-                    negative: false
-                };
+                let mut hex_str_vec: Vec<_> = s.split("").collect();
+                
+                hex_str_vec.retain(|&x| x != "");
 
-                Ok(res)
+                hex_str_vec
+                    .iter()
+                    .skip(2)
+                    .for_each(|x| {
+                        
+                        let byte = u8::from_str_radix(&format!("{}", x), 16).unwrap();
+
+                        let binary_str = format!("{:04b}", byte);
+
+                        let mut binary_str_vec: Vec<_> = binary_str.split("").collect();
+                
+                        binary_str_vec.retain(|&x| x != "");
+
+                        binary_str_vec
+                            .iter()
+                            .for_each(|y| {
+                                
+                                let bit = u8::from_str_radix(&y, 2).unwrap();
+
+                                res.push(bit)
+
+                            });
+
+                    });
+
+                while res.len() > 1 && res[0] == 0 {
+                    res.remove(0);
+                }
+
+                Int {bits: res, sign: false}
 
             },
 
-            _ => Err(Box::new(CustomError("unsupported radix!".into())))
+            _ => panic!("Unsupported radix!")
 
         }
 
     }
 
-    pub fn to_str(self, r: u8) -> Result<String, Box<dyn Error>> {
+    pub fn to_str(self, r: u8) -> String {
         
         match r {
             
             2 => {
 
-                let mut res: String = String::with_capacity(self.bits.len());
+                let mut res: String = String::with_capacity(self.bits.len() + 2);
+
+                res.push_str("b'");
     
                 for bit in self.bits {
-                    
                     res.push_str(&bit.to_string())
-                
                 };
 
-                Ok(res)
+                res
 
             },
 
-            10 => Ok(base10::to(self.bits)),
+            10 => base10::to(self.bits),
 
-            16 => Ok(base16::to(self.bits)),
+            16 => {
 
-            _ => Err(Box::new(CustomError("unsupported radix!".into())))
+                let mut res = String::from("0x");
+
+                let bytes: Vec<u8> = self.to_bytes();
+
+                bytes
+                    .iter()
+                    .for_each(|x| {
+
+                        let hex_str = format!("{:02X}", x);
+
+                        res.push_str(&hex_str)
+
+                    });
+                    
+                res
+
+            },
+
+            _ => panic!("Unsupported radix!")
 
         }
 
@@ -332,10 +138,7 @@ impl Int {
 
     pub fn from_bytes(bytes: &Vec<u8>) -> Int {
 
-        let mut res = Int {
-            negative: false,
-            bits: Vec::new()
-        };
+        let mut res = Vec::new();
 
         let bin_str: String = bytes
             .iter()
@@ -348,22 +151,14 @@ impl Int {
             );
 
         for i in bin_str.chars() {
-
-            res.bits.push(u8::from_str_radix(&i.to_string(), 2).unwrap())
-
+            res.push(u8::from_str_radix(&i.to_string(), 2).unwrap())
         }
 
-        while res.bits[0] == 0 {
-
-            if res.bits.len() > 1 {
-                
-                res.bits.remove(0);
-
-            }
-
+        while res.len() > 1 && res[0] == 0 {
+            res.remove(0);
         }
 
-        res
+        Int {bits: res, sign: false}
 
     }
 
@@ -410,144 +205,693 @@ impl Int {
 
     }
 
-    // comparison functions
+}
 
-    pub fn is_greater(self, b: &Int) -> bool {
+impl Add for Int {
 
-        if &compare(self, b.to_owned()) == "greater" {
-            
-            true
+    type Output = Self;
+
+    fn add(self, b: Self) -> Self {
         
-        } else {
-            
-            false
+        if !self.sign && !b.sign {
+            Self {bits: adder(&self.bits, &b.bits), sign: false}
+        }
         
+        else if self.sign && b.sign {
+            Self {bits: adder(&self.bits, &b.bits), sign: true}
+        }
+            
+        else if self.sign {
+            b - Self {bits: self.bits, sign: true}
+        }
+        
+        else {
+            self - Self {bits: b.bits, sign: true}
         }
 
     }
 
-    pub fn is_less(self, b: &Int) -> bool {
+}
 
-        if &compare(self, b.to_owned()) == "less" {
+impl Add for &Int {
 
-            true
+    type Output = Int;
 
-        } else {
+    fn add(self, b: Self) -> Int {
+        self.clone() + b.clone()
+    }
 
-            false
+}
+
+impl AddAssign for Int {
+    fn add_assign(&mut self, b: Self) {
+        *self = self.clone() + b;
+    }
+}
+
+impl Sub for Int {
+
+    type Output = Self;
+
+    fn sub(self, b: Self) -> Self {
+        
+        if !self.sign && !b.sign {
+
+            if self > b {
+                Self {bits: subtractor(&self.bits, &b.bits), sign: false}
+            }
+            
+            else {
+                Self {bits: subtractor(&b.bits, &self.bits), sign: true}
+            }
+
+        }
+
+        else if self.sign && b.sign {
+            self + Self {bits: b.bits, sign: false}
+        }
+        
+        else if self.sign {
+            Self {bits: adder(&self.bits, &b.bits), sign: true}
+        }
+        
+        else {
+            Self {bits: adder(&self.bits, &b.bits), sign: false}
+        }
+
+    }
+}
+
+impl Sub for &Int {
+
+    type Output = Int;
+
+    fn sub(self, b: Self) -> Int {
+        self.clone() - b.clone()
+    }
+
+}
+
+impl SubAssign for Int {
+    fn sub_assign(&mut self, b: Self) {
+        *self = self.clone() - b;
+    }
+}
+
+impl Mul for Int {
+
+    type Output = Self;
+
+    fn mul(self, b: Self) -> Self {
+
+        let mut res = Int::zero();
+
+        if self.bits != vec![0] && b.bits != vec![0] {
+
+            res = self.clone();
+
+            b.bits
+                .iter()
+                .skip(1)
+                .for_each(|&x| {
+
+                    res.bits = adder(&res.bits, &res.bits);
+                    
+                    if x == 1 {
+                        res.bits = adder(&res.bits, &self.bits);
+                    }
+                
+                });
+
+            match(self.sign, b.sign) {
+                (false, true) => res.sign = true,
+                (true, false) => res.sign = true,
+                _ => ()
+            }
+
+        }
+
+        res
+
+    }
+
+}
+
+impl Mul for &Int {
+
+    type Output = Int;
+
+    fn mul(self, b: Self) -> Int {
+        self.clone() * b.clone()
+    }
+
+}
+
+impl Div for Int {
+
+    type Output = Self;
+
+    fn div(self, b: Self) -> Self {
+
+        let mut res = Int::zero();
+
+        if self.bits == vec![0] {
+            res
+        }
+        
+        else if b.bits == vec![0] {
+            panic!("a/0 is undefined!")
+        }
+        
+        else {
+
+            let (q, _) = divisor(&self.bits, &b.bits);
+            
+            res = Int{bits: q, sign: false};
+
+            match(self.sign, b.sign) {
+                (false, true) => res.sign = true,
+                (true, false) => res.sign = true,
+                _ => ()
+            }
+
+            res
 
         }
 
     }
 
-    pub fn is_equal(self, b: &Int) -> bool {
+}
 
-        if &compare(self, b.to_owned()) == "equal" {
+impl Div for &Int {
 
-            true
+    type Output = Int;
 
-        } else {
+    fn div(self, b: Self) -> Int {
+        self.clone() / b.clone()
+    }
 
-            false
+}
+
+impl Rem for Int {
+
+    type Output = Self;
+
+    fn rem(self, b: Self) -> Self {
+
+        if self.bits == vec![0] {
+            Int::zero()
+        }
+        
+        else if b.bits == vec![0] {
+            panic!("a/0 is undefined!")
+        }
+        
+        else {
+
+            let (_, r) = divisor(&self.bits, &b.bits);
+
+            let mut res = Int{bits: r, sign: false};
+
+            if self.sign {
+                res.sign = true;
+            }
+
+            res
 
         }
 
     }
 
-    // bitwise functions
-    pub fn not(mut self) -> Self {
+}
 
-        self.bits = self.bits.iter()
-            .map(|x| { match x { 1 => 0, _ => 1 } })
+impl Rem for &Int {
+
+    type Output = Int;
+
+    fn rem(self, b: Self) -> Int {
+        self.clone() % b.clone()
+    }
+
+}
+
+impl Not for Int {
+
+    type Output = Self;
+
+    fn not(mut self) -> Self::Output {
+        
+        self.bits = self.bits
+            .iter()
+            .map(|&x| {
+                match x {
+                    1 => 0,
+                    _ => 1
+                }
+            })
             .collect();
 
         self
-        
+
     }
 
-    pub fn and(self, y: &Int) -> Self {
+}
 
-        let mut x_bits: Vec<u8> = self.bits;
+impl Not for &Int {
 
-        let mut y_bits: Vec<u8> = y.bits.clone();
+    type Output = Int;
 
-        let mut and_bits: Vec<u8> = Vec::new();
+    fn not(self) -> Int {
+        !self.clone()
+    }
 
-        while x_bits.len() > 0 || y_bits.len() > 0 {
+}
 
-            let x_bit = match x_bits.pop() { Some(r) => r, None => 0 };
+impl BitAnd for Int {
+
+    type Output = Self;
     
-            let y_bit = match y_bits.pop() { Some(r) => r, None => 0 };
+    fn bitand(mut self, mut b: Self) -> Self::Output {
 
-            let and_bit = match (x_bit, y_bit) { (1, 1) => 1, _ => 0 };
+        let mut res: Vec<u8> = Vec::new();
 
-            and_bits.push(and_bit)
+        while !self.bits.is_empty() || !b.bits.is_empty() {
+
+            let a_bit = match self.bits.pop() {
+                Some(r) => r,
+                None => 0
+            };
+    
+            let b_bit = match b.bits.pop() {
+                Some(r) => r,
+                None => 0
+            };
+
+            let and_bit = match (a_bit, b_bit) {
+                (1, 1) => 1,
+                _ => 0
+            };
+
+            res.push(and_bit)
 
         }
 
-        and_bits.reverse();
+        res.reverse();
 
-        let res = Int { bits: and_bits, negative: false };
-
-        res
+        Int {bits: res, sign: false}
 
     }
+}
 
-    pub fn or(self, y: &Int) -> Self {
-        
-        let mut x_bits: Vec<u8> = self.bits;
+impl BitAnd for &Int {
 
-        let mut y_bits: Vec<u8> = y.bits.clone();
+    type Output = Int;
 
-        let mut or_bits: Vec<u8> = Vec::new();
+    fn bitand(self, b: Self) -> Int {
+        self.clone() & b.clone()
+    }
 
-        while x_bits.len() > 0 || y_bits.len() > 0 {
+}
 
-            let x_bit = match x_bits.pop() { Some(r) => r, None => 0 };
+impl BitOr for Int {
+
+    type Output = Self;
+
+    fn bitor(mut self, mut b: Self) -> Self::Output {
+
+        let mut res: Vec<u8> = Vec::new();
+
+        while !self.bits.is_empty() || !b.bits.is_empty() {
+
+            let a_bit = match self.bits.pop() {
+                Some(r) => r,
+                None => 0
+            };
     
-            let y_bit = match y_bits.pop() { Some(r) => r, None => 0 };
+            let b_bit = match b.bits.pop() {
+                Some(r) => r,
+                None => 0
+            };
 
-            let or_bit = match (x_bit, y_bit) { (0, 0) => 0, _ => 1 };
+            let or_bit = match (a_bit, b_bit) {
+                (0, 0) => 0,
+                _ => 1
+            };
 
-            or_bits.push(or_bit)
+            res.push(or_bit)
 
         }
 
-        or_bits.reverse();
+        res.reverse();
 
-        let res = Int { bits: or_bits, negative: false };
-
-        res
+        Int {bits: res, sign: false}
 
     }
+}
 
-    pub fn xor(self, y: &Int) -> Self {
-        
-        let mut x_bits: Vec<u8> = self.bits;
+impl BitOr for &Int {
 
-        let mut y_bits: Vec<u8> = y.bits.clone();
+    type Output = Int;
 
-        let mut xor_bits: Vec<u8> = Vec::new();
+    fn bitor(self, b: Self) -> Int {
+        self.clone() | b.clone()
+    }
 
-        while x_bits.len() > 0 || y_bits.len() > 0 {
+}
 
-            let x_bit = match x_bits.pop() { Some(r) => r, None => 0 };
+impl BitXor for Int {
+
+    type Output = Self;
+
+    fn bitxor(mut self, mut b: Self) -> Self::Output {
+
+        let mut res: Vec<u8> = Vec::new();
+
+        while !self.bits.is_empty() || !b.bits.is_empty() {
+
+            let a_bit = match self.bits.pop() {
+                Some(r) => r,
+                None => 0
+            };
     
-            let y_bit = match y_bits.pop() { Some(r) => r, None => 0 };
+            let b_bit = match b.bits.pop() {
+                Some(r) => r,
+                None => 0
+            };
 
-            let xor_bit = match (x_bit, y_bit) {
+            let xor_bit = match (a_bit, b_bit) {
                 (0, 1) => 1,
                 (1, 0) => 1,
                 _ => 0
             };
 
-            xor_bits.push(xor_bit)
+            res.push(xor_bit)
 
         }
 
-        xor_bits.reverse();
+        res.reverse();
 
-        let res = Int { bits: xor_bits, negative: false };
+        Int {bits: res, sign: false}
+
+    }
+}
+
+impl BitXor for &Int {
+
+    type Output = Int;
+
+    fn bitxor(self, b: Self) -> Int {
+        self.clone() ^ b.clone()
+    }
+
+}
+
+impl Ord for Int {
+
+    fn cmp(&self, b: &Self) -> Ordering {
+        
+        if !self.sign && b.sign {
+            Ordering::Greater
+        }
+        
+        else if self.sign && !b.sign {
+            Ordering::Less
+        }
+        
+        else if !self.sign && !b.sign {
+            comparator(&self.bits, &b.bits)
+        }
+        
+        else {
+    
+            match comparator(&self.bits, &b.bits) {
+                Ordering::Greater => Ordering::Less,
+                Ordering::Less => Ordering::Greater,
+                Ordering::Equal => Ordering::Equal
+            }
+    
+        }
+
+    }
+
+}
+
+impl PartialOrd for Int {
+    fn partial_cmp(&self, b: &Self) -> Option<Ordering> {
+        Some(self.cmp(b))
+    }
+}
+
+impl PartialEq for Int {
+    fn eq(&self, other: &Self) -> bool {
+        self.bits == other.bits && self.sign == other.sign
+    }
+}
+
+impl Eq for Int {}
+
+fn adder(a_bits: &Vec<u8>, b_bits: &Vec<u8>) -> Vec<u8> {
+
+    let mut a = a_bits.clone();
+
+    let mut b = b_bits.clone();
+    
+    let mut res: Vec<u8> = Vec::new();
+
+    let mut carry: u8 = 0;
+
+    while !a.is_empty() || !b.is_empty() {
+
+        let a_bit = match a.pop() {
+            Some(r) => r,
+            None => 0
+        };
+
+        let b_bit = match b.pop() {
+            Some(r) => r,
+            None => 0
+        };
+
+        let addition = carry + a_bit + b_bit;
+
+        match addition {
+            3 => { res.push(1); carry = 1 },
+            2 => { res.push(0); carry = 1 },
+            1 => { res.push(1); carry = 0 },
+            _ => { res.push(0); carry = 0 }
+        }
+
+    }
+
+    if carry != 0 {
+        res.push(1);
+    }
+
+    res.reverse();
+
+    res
+
+}
+
+fn subtractor(a_bits: &Vec<u8>, b_bits: &Vec<u8>) -> Vec<u8> {
+
+    let mut a = a_bits.clone();
+    let mut b = b_bits.clone();
+    
+    let mut res: Vec<u8> = Vec::new();
+
+    while !a.is_empty() || !b.is_empty() {
+
+        let a_bit = match a.pop() {
+            Some(r) => r,
+            None => 0
+        };
+
+        let b_bit = match b.pop() {
+            Some(r) => r,
+            None => 0
+        };
+
+        let bits: (u8, u8) = (a_bit, b_bit);
+
+        match bits {
+            (0,0) => res.push(0),
+            (1,1) => res.push(0),
+            (1,0) => res.push(1),
+            _ => {
+
+                let mut borrowed: bool = false;
+
+                let mut borrow_index = a.len() - 1;
+
+                while !borrowed {
+
+                    if a[borrow_index] == 1 {
+                        
+                        a[borrow_index] = 0;
+                        
+                        borrowed = true;
+                    
+                    }
+                    
+                    else {
+                        
+                        a[borrow_index] = 1;
+                        
+                        borrow_index -= 1;
+                    
+                    }
+    
+                }
+                
+                res.push(1);
+
+            }
+        }
+
+    }
+
+    res.reverse();
+
+    while res.len() > 1 && res[0] == 0 {
+        res.remove(0);
+    }
+
+    res
+
+}
+
+fn divisor(a: &Vec<u8>, b: &Vec<u8>) -> (Vec<u8>, Vec<u8>) {
+
+    let mut q: Vec<u8> = vec![0];
+
+    let mut r: Vec<u8> = vec![0];
+
+    a.iter()
+        .for_each(|&x| {
+
+            r.push(x);
+
+            while r.len() > 1 && r[0] == 0 {
+                r.remove(0);
+            };
+
+            if comparator(&r, b) == Ordering::Greater {
+
+                q.push(1);
+                
+                r = subtractor(&r, b);
+                
+            }
+            
+            else if comparator(&r, b) == Ordering::Equal {
+
+                q.push(1);
+
+                r = vec![0]
+
+            }
+            
+            else {
+                q.push(0)
+            };
+
+        });
+
+    while q.len() > 1 && q[0] == 0 {
+        q.remove(0);
+    };
+
+    while r.len() > 1 && r[0] == 0 {
+        r.remove(0);
+    };
+
+    (q, r)
+
+}
+
+fn comparator(a: &Vec<u8>, b: &Vec<u8>) -> Ordering {
+
+    let mut a_bits = a.clone();
+    
+    let mut b_bits = b.clone();
+
+    while a_bits.len() > 1 && a_bits[0] == 0 {
+        a_bits.remove(0);
+    };
+
+    while b_bits.len() > 1 && b_bits[0] == 0 {
+        b_bits.remove(0);
+    };
+
+    let a_len = a_bits.len();
+    
+    let b_len = b_bits.len();
+
+    if a_len > b_len {
+        Ordering::Greater
+    }
+    
+    else if a_len < b_len {
+        Ordering::Less
+    }
+    
+    else {
+
+        if a_bits == b_bits {
+            Ordering::Equal
+        }
+        
+        else {
+
+            while a_bits[0] == b_bits[0] { 
+                
+                a_bits.remove(0);
+                
+                b_bits.remove(0);
+
+            }
+
+            if a_bits[0] == 1 {
+                Ordering::Greater
+            }
+            
+            else {
+                Ordering::Less
+            }
+
+        }
+
+    }
+
+}
+
+pub fn pow(a: &Int, e:&Int) -> Int {
+
+    if a.bits == vec![0] {
+        Int::zero()
+    }
+    
+    else if e.bits == vec![0] {
+        Int::one()
+    }
+    
+    else {
+
+        let mut res: Int = a.clone();
+
+        e.bits
+            .iter()
+            .skip(1)
+            .for_each(|&x| {
+
+                res = (&res * &res).clone();
+
+                if x == 1 {
+                    res = (&res * a).clone()
+                }
+                
+            });
 
         res
 
@@ -555,29 +899,58 @@ impl Int {
 
 }
 
-fn compare(a: Int, b: Int) -> String {
+pub fn modulo(a: &Int, b: &Int) -> Int {
 
-    if !a.negative && b.negative {
-            
-        "greater".to_string()
+    if a.bits == vec![0] {
+        Int::zero()
+    }
     
-    } else if a.negative && !b.negative {
+    else if b.bits == vec![0] {
+        panic!("a/0 is undefined!")
+    }
+    
+    else {
 
-        "less".to_string()
+        let r = a % b;
 
-    } else if !a.negative && !b.negative {
+        if r.sign { &r + b }
+        
+        else { r }
 
-        comparison::run(a, b)
+    }   
 
+} 
+  
+pub fn mod_inv(a: &Int, m: &Int) -> Int {
+
+    let (g, mut x) = gcd(a.clone(), m.clone(), Int::zero(), Int::one()); 
+    
+    if g != Int::one() {
+        panic!("Inverse doesn't exist!")
     } else {
-
-        match &comparison::run(a, b)[..] {
-            "greater" => "less".to_string(),
-            "less" => "greater".to_string(),
-            _ => "equal".to_string()
+    
+        while x < Int::zero() {
+            x += m.clone()
         }
-
+        
+        x
+        
     }
 
-
 }
+
+fn gcd(a: Int, m: Int, x: Int, y: Int) -> (Int, Int) {
+
+    if a == Int::zero() {
+        (m, x)
+    } else {
+
+        let newa = &m % &a;
+    
+        let newy = x - &(&m / &a) * &y;
+  
+        gcd(newa, a, y, newy)
+        
+    }
+    
+} 
