@@ -7,7 +7,7 @@ In your `Cargo.toml`:
 
 ```
 [dependencies]
-opis = "2.0.0"
+opis = "2.1.0"
 ```
 
 In your Rust file:

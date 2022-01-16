@@ -1,9 +1,8 @@
+use crate::Bit;
 
-use std::error::Error;
+pub fn from(s: &str) -> Vec<Bit> {
 
-pub fn from(s: &str) -> Result<Vec<u8>, Box<dyn Error>> {
-
-    let mut res: Vec<u8> = vec![];
+    let mut res: Vec<Bit> = Vec::new();
 
     let mut i_str = s.to_string();
 
@@ -13,39 +12,39 @@ pub fn from(s: &str) -> Result<Vec<u8>, Box<dyn Error>> {
 
         i_str = s_half;
 
-        res.push(rem);
+        match rem {
+            0 => res.push(Bit::Zero),
+            1 => res.push(Bit::One),
+            _ => panic!("Unsupported bit type {}", rem)
+        }
 
     }
 
     res.reverse();
 
     if res.is_empty() {
-        
-        res = vec![0]
-    
+        res = vec![Bit::Zero]
     }
 
-    Ok(res)
+    res
 
 }
 
-pub fn to(bits: Vec<u8>) -> String {
+pub fn to(bits: Vec<Bit>) -> String {
 
-    let mut current_number: String = "0".to_string();
+    let mut res: String = "0".to_string();
 
     for b in bits {
 
-        current_number = double(&current_number);
+        res = double(&res);
 
-        if b == 1 {
-
-            current_number = add_one(&current_number);
-
+        if b == Bit::One {
+            res = add_one(&res);
         }
 
     }
 
-    current_number
+    res
 
 }
 
