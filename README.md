@@ -6,37 +6,42 @@ Opis is an arithmetic library for integer numbers written in Rust.
 In your `Cargo.toml`:
 
 ```
+
 [dependencies]
-opis = "2.1.0"
+opis = "2.2.0"
+
 ```
 
 In your Rust file:
 
 ```
-use opis::Int;
+
+use opis::{Bit, Int, pow, modulo, mod_inv};
+
 ```
 
 ### Features
 - Representation of integers of any sign & magnitude.
-- Bits are stored in big endian order.
-- Operator support for:-
-    - Add - addition
-    - AddAssign - add and assign
-    - Sub - subtraction
-    - SubAssign - subtract and assign
-    - Mul - multiplication
-    - Div - division
-    - Rem - remainder
+- Bits consist of a Sign Bit and Magnitude Bits.
+- The Magnitude is stored in big endian order.
+- Std Ops Int support for:-
+    - Add
+    - AddAssign
+    - Sub
+    - SubAssign
+    - Mul
+    - Div
+    - Rem
     - Not
     - BitAnd
     - BitOr
     - BitXor
-    - Eq - equality comparison
-    - Ord - ordering comparison
+    - Eq
+    - Ord
 - Arithetic functions included are:-
-    - pow - exponentiation
+    - pow - Exponentiation
     - modulo
-    - mod_inv - modular multiplicative inverse
+    - mod_inv - Modular Multiplicative Inverse
 - Conversion functions support for radix 2, 10 & 16 formatted strings.
 
 ### API
@@ -147,39 +152,46 @@ let i: Int = mod_inv(&a, &b);
 
 `From Str`
 ```
-let binary_integer: Int = Int::from_str("b'1010101", 2);
 
-let decimal_integer: Int = Int::from_str("674755", 10);
+let binary_integer: Int = Int::from("b'1010101");
 
-let hex_integer: Int = Int::from_str("0xABC012", 16);
+let decimal_integer: Int = Int::from("674755");
+
+let hex_integer: Int = Int::from("0x00ABC012");
+
 ```
 
 `To Str`
 ```
-let binary_str: String = integer_1.to_str(2);
 
-let decimal_str: String = integer_2.to_str(10);
+let binary_str: String = integer_1.to(2);
 
-let hex_str: String = integer_3.to_str(16);
+let decimal_str: String = integer_2.tO(10);
+
+let hex_str: String = integer_3.to(16);
 ```
 
 `From Bytes`
 ```
+
 let integer: Int = Int::from_bytes(&bytes);
+
 ```
 
 `To Bytes`
 ```
+
 let bytes: Vec<u8> = integer.to_bytes();
+
 ```
 
 
 
 ### Future
-- Benchmarking Performance
-- Twos Complements support
+- Benchmarking Performance.
+- Two's Complement support.
 
 ### Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2022-01-13
+2022-02-09

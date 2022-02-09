@@ -12,16 +12,14 @@ pub fn main(a: &Int, b: &Int) -> Int {
     
     else {
 
-        let r = a % b;
+        let mut res = a % b;
 
-        if r.sign {
-            &r + b
+        while res < Int::zero() {
+            res += b.clone()
         }
-        
-        else {
-            r
-        }
+
+        res
 
     }   
 
-} 
+}

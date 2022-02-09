@@ -10,7 +10,6 @@ pub fn from(s: &str) -> Vec<Bit> {
 
     hex_str_vec
         .iter()
-        .skip(2)
         .for_each(|x| {
             
             let byte = u8::from_str_radix(&format!("{}", x), 16).unwrap();

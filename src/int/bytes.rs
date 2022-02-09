@@ -6,7 +6,7 @@ pub fn from(bytes: &Vec<u8>) -> Vec<Bit> {
 
     let bin_str: String = bytes
         .iter()
-        .fold(String::new(), |acc, x| format!("{}{}", acc, x));
+        .fold(String::new(), |acc, x| format!("{}{:b}", acc, x));
 
     for i in bin_str.chars() {
         match i {
@@ -30,25 +30,19 @@ pub fn to(mut bits: Vec<Bit>) -> Vec<u8> {
 
     while !bits.is_empty() {
 
-        let mut byte_bits: Vec<u8> = Vec::new();
+        let mut byte_str: String = String::new();
 
-        while byte_bits.len() != 8 {
+        while byte_str.len() < 8 {
             match bits.pop() {
                 Some(r) => {
                     match r {
-                        Bit::Zero => res.push(0),
-                        Bit::One => res.push(1)
+                        Bit::Zero => byte_str = format!("0{}", byte_str),
+                        Bit::One => byte_str = format!("1{}", byte_str)
                     }
                 },
                 None => break
             }
         }
-
-        byte_bits.reverse();
-
-        let byte_str = byte_bits
-            .iter()
-            .fold(String::new(), |acc, x| format!("{}{}", acc, x));
 
         res.push(u8::from_str_radix(&byte_str, 2).unwrap())
 
