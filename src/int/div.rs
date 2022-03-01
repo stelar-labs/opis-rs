@@ -12,29 +12,29 @@ impl Div for Int {
 
     type Output = Self;
     
-    fn div(self, b: Self) -> Self {
+    fn div(self, other: Self) -> Self {
         
         if self == Int::zero() {
             Int::zero()
         }
         
-        else if b == Int::zero() {
+        else if other == Int::zero() {
             panic!("a/0 is undefined!")
         }
         
         else {
 
-            let (q, _) = divisor(self.bits[1..].to_vec(), b.bits[1..].to_vec());
+            let (q, _) = divisor(self.magnitude, other.magnitude);
 
-            match (self.bits[0], b.bits[0]) {
+            match (self.sign, other.sign) {
 
-                (Bit::Zero, Bit::Zero) => Int {bits: [vec![Bit::Zero], q].concat()},
+                (false, false) => Int { magnitude: q, sign: false },
     
-                (Bit::One, Bit::One) => Int {bits: [vec![Bit::Zero], q].concat()},
+                (true, true) => Int { magnitude: q, sign: false },
     
-                (Bit::Zero, Bit::One) => Int {bits: [vec![Bit::One], q].concat()},
+                (false, true) => Int { magnitude: q, sign: true },
     
-                (Bit::One, Bit::Zero) => Int {bits: [vec![Bit::One], q].concat()}
+                (true, false) => Int { magnitude: q, sign: true }
     
             }
 
@@ -75,17 +75,13 @@ pub fn divisor(n: Vec<Bit>, d: Vec<Bit>) -> (Vec<Bit>, Vec<Bit>) {
                 
                 r = subtractor(r.clone(), d.clone());
                 
-            }
-            
-            else if comparator(&r, &d) == Ordering::Equal {
+            } else if comparator(&r, &d) == Ordering::Equal {
 
                 q.push(Bit::One);
 
                 r = vec![Bit::Zero]
 
-            }
-            
-            else {
+            } else {
                 q.push(Bit::Zero)
             };
 

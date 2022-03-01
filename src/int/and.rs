@@ -7,26 +7,18 @@ impl BitAnd for Int {
 
     type Output = Self;
     
-    fn bitand(mut self, mut b: Self) -> Self::Output {
+    fn bitand(mut self, mut other: Self) -> Self::Output {
 
         let mut res: Vec<Bit> = Vec::new();
 
-        while !self.bits.is_empty() || !b.bits.is_empty() {
+        while !self.magnitude.is_empty() || !other.magnitude.is_empty() {
 
-            let a_bit: Bit =
-                match self.bits.pop() {
-                    Some(r) => r,
-                    None => Bit::Zero
-                };
+            let self_bit: Bit = match self.magnitude.pop() { Some(r) => r, None => Bit::Zero };
 
-            let b_bit: Bit =
-                match b.bits.pop() {
-                    Some(r) => r,
-                    None => Bit::Zero
-                };
+            let other_bit: Bit = match other.magnitude.pop() { Some(r) => r, None => Bit::Zero };
 
             let and_bit: Bit =
-                match (a_bit, b_bit) {
+                match (self_bit, other_bit) {
                     (Bit::One, Bit::One) => Bit::One,
                     _ => Bit::Zero
                 };
@@ -37,7 +29,10 @@ impl BitAnd for Int {
 
         res.reverse();
 
-        Int {bits: res}
+        Int {
+            magnitude: res,
+            sign: self.sign & other.sign
+        }
 
     }
 

@@ -1,22 +1,17 @@
-use std::ops::Not;
-
-use crate::Bit;
 use crate::Int;
+use std::ops::Not;
 
 impl Not for Int {
 
     type Output = Self;
     
     fn not(mut self) -> Self::Output {
+
+        self.sign = !self.sign;
         
-        self.bits = self.bits
+        self.magnitude = self.magnitude
             .iter()
-            .map(|x| {
-                match x {
-                    Bit::One => Bit::Zero,
-                    Bit::Zero => Bit::One
-                }
-            })
+            .map(|x| !x)
             .collect();
 
         self

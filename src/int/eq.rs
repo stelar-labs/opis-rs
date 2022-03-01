@@ -1,8 +1,8 @@
 use crate::Int;
 
 impl PartialEq for Int {
-    fn eq(&self, b: &Self) -> bool {
-        self.bits == b.bits
+    fn eq(&self, other: &Self) -> bool {
+        self.magnitude == other.magnitude && self.sign == other.sign
     }
 }
 

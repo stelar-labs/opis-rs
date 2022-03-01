@@ -3,23 +3,24 @@ use crate::Int;
 use std::cmp::Ordering;
 
 impl Ord for Int {
-    fn cmp(&self, b: &Self) -> Ordering {
+
+    fn cmp(&self, other: &Self) -> Ordering {
         
-        if self.bits[0] == Bit::Zero && b.bits[0] == Bit::One {
+        if !self.sign && other.sign {
             Ordering::Greater
         }
         
-        else if self.bits[0] == Bit::One && b.bits[0] == Bit::Zero {
+        else if self.sign && !other.sign {
             Ordering::Less
         }
         
-        else if self.bits[0] == Bit::Zero && b.bits[0] == Bit::Zero {
-            comparator(&self.bits[1..].to_vec(), &b.bits[1..].to_vec())
+        else if !self.sign && !other.sign {
+            comparator(&self.magnitude, &other.magnitude)
         }
         
         else {
     
-            match comparator(&self.bits[1..].to_vec(), &b.bits[1..].to_vec()) {
+            match comparator(&self.magnitude, &other.magnitude) {
                 Ordering::Greater => Ordering::Less,
                 Ordering::Less => Ordering::Greater,
                 Ordering::Equal => Ordering::Equal
@@ -31,8 +32,8 @@ impl Ord for Int {
 }
 
 impl PartialOrd for Int {
-    fn partial_cmp(&self, b: &Self) -> Option<Ordering> {
-        Some(self.cmp(b))
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }
 
@@ -56,33 +57,22 @@ pub fn comparator(a: &Vec<Bit>, b: &Vec<Bit>) -> Ordering {
 
     if a_len > b_len {
         Ordering::Greater
-    }
-    
-    else if a_len < b_len {
+    } else if a_len < b_len {
         Ordering::Less
-    }
-    
-    else {
+    } else {
 
         if a_bits == b_bits {
             Ordering::Equal
-        }
-        
-        else {
+        } else {
 
-            while a_bits[0] == b_bits[0] { 
-                
+            while a_bits[0] == b_bits[0] {
                 a_bits.remove(0);
-                
                 b_bits.remove(0);
-
             }
 
             if a_bits[0] == Bit::One {
                 Ordering::Greater
-            }
-            
-            else {
+            } else {
                 Ordering::Less
             }
 

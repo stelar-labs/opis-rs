@@ -11,62 +11,58 @@ impl Sub for Int {
     
     type Output = Self;
     
-    fn sub(self, b: Self) -> Self {
+    fn sub(self, other: Self) -> Self {
         
-        match (self.bits[0], b.bits[0]) {
+        match (self.sign, other.sign) {
 
-            (Bit::Zero, Bit::Zero) => {
+            (false, false) => {
     
-                match comparator(&self.bits[1..].to_vec(), &b.bits[1..].to_vec()) {
+                match comparator(&self.magnitude, &other.magnitude) {
+                    
                     Ordering::Equal => Int::zero(),
+                    
                     Ordering::Greater => Int {
-                        bits: [
-                            vec![Bit::Zero],
-                            subtractor(self.bits[1..].to_vec(), b.bits[1..].to_vec())
-                        ].concat()
+                        magnitude: subtractor(self.magnitude, other.magnitude),
+                        sign: false
                     },
+                    
                     Ordering::Less => Int {
-                        bits: [
-                            vec![Bit::One],
-                            subtractor(b.bits[1..].to_vec(), self.bits[1..].to_vec())
-                        ].concat()
+                        magnitude: subtractor(other.magnitude, self.magnitude),
+                        sign: true
                     }
+
                 }
     
             },
     
-            (Bit::One, Bit::One) => {
+            (true, true) => {
     
-                match comparator(&self.bits[1..].to_vec(), &b.bits[1..].to_vec()) {
+                match comparator(&self.magnitude, &other.magnitude) {
+                    
                     Ordering::Equal => Int::zero(),
+                    
                     Ordering::Greater => Int {
-                        bits: [
-                            vec![Bit::One],
-                            subtractor(self.bits[1..].to_vec(), b.bits[1..].to_vec())
-                        ].concat()
+                        magnitude: subtractor(self.magnitude, other.magnitude),
+                        sign: true
                     },
+                    
                     Ordering::Less => Int {
-                        bits: [
-                            vec![Bit::Zero],
-                            subtractor(b.bits[1..].to_vec(), self.bits[1..].to_vec())
-                        ].concat()
+                        magnitude: subtractor(other.magnitude, self.magnitude),
+                        sign: false
                     }
+
                 }
     
             },
     
-            (Bit::One, Bit::Zero) => Int {
-                bits: [
-                    vec![Bit::One],
-                    adder(self.bits[1..].to_vec(), b.bits[1..].to_vec())
-                ].concat()
+            (true, false) => Int {
+                magnitude: adder(self.magnitude, other.magnitude),
+                sign: true
             },
     
-            (Bit::Zero, Bit::One) => Int {
-                bits: [
-                    vec![Bit::Zero],
-                    adder(self.bits[1..].to_vec(), b.bits[1..].to_vec())
-                ].concat()
+            (false, true) => Int {
+                magnitude: adder(self.magnitude, other.magnitude),
+                sign: false
             }
     
         }
@@ -98,17 +94,9 @@ pub fn subtractor(mut a: Vec<Bit>, mut b: Vec<Bit>) -> Vec<Bit> {
 
     while !a.is_empty() || !b.is_empty() {
 
-        let a_bit: Bit =
-            match a.pop() {
-                Some(r) => r,
-                None => Bit::Zero
-            };
+        let a_bit: Bit = match a.pop() { Some(r) => r, None => Bit::Zero };
 
-        let b_bit: Bit =
-            match b.pop() {
-                Some(r) => r,
-                None => Bit::Zero
-            };
+        let b_bit: Bit = match b.pop() { Some(r) => r, None => Bit::Zero };
         
         match (a_bit, b_bit) {
             

@@ -16,8 +16,6 @@ pub mod or;
 pub mod xor;
 
 pub mod pow;
-pub mod modulo;
-pub mod mod_inv;
 
 mod base2;
 mod base10;
@@ -27,82 +25,97 @@ mod bytes;
 impl Int {
 
     pub fn zero() -> Self {
-        Int {bits: vec![Bit::Zero, Bit::Zero]}
+        Int { magnitude: vec![Bit::Zero], sign: false }
     }
 
     pub fn one() -> Self {
-        Int {bits: vec![Bit::Zero, Bit::One]}
+        Int { magnitude: vec![Bit::One], sign: false }    
     }
 
-    pub fn from(input: &str) -> Self {
+    pub fn from_binary(input: &str) -> Self {
 
-        if input.len() > 2 {
+        if input.len() > 3 {
 
             let (first, last) = input.split_at(2);
 
             match first {
-                
-                "b'" => Int {bits: base2::from(last)},
-                
-                "0x" => {
-                
-                    if last.len() > 2 {
-
-                        let (sign, mag) = last.split_at(2);
-                
-                        match sign {
-                            "00" => Int {bits: [vec![Bit::Zero], base16::from(mag)].concat()},
-                            "01" => Int {bits: [vec![Bit::One], base16::from(mag)].concat()},
-                            _ => panic!("Unsupported base16 format!")
-                        }
-
-                    }
-
-                    else {
-                        panic!("Unsupported base16 format!")
-                    }
-                    
-                },
-                _ => Int {bits: base10::from(input)}
+                "b'" => Int { magnitude: base2::from(last), sign: false },
+                _ => panic!("Binary string must start with b'!")
             }
 
+        } else {
+            panic!("String is too short!")
+        }
+
+    }
+
+    pub fn from_bytes(input: &&Vec<u8>) -> Self {
+        Int { magnitude: bytes::from(input), sign: false }
+    }
+
+    pub fn from_decimal(input: &str) -> Self {
+
+        if input.len() > 1 {
+
+            let (first, last) = input.split_at(1);
+
+            match first {
+                "-" => Int { magnitude: base10::from(last), sign: true },
+                _ => Int { magnitude: base10::from(input), sign: false }
+            }
 
         } else {
-            Int {bits: base10::from(input)}
+            panic!("String is too short!")
+        }
+    }
+
+    pub fn from_hex(input: &str) -> Self {
+
+        if input.len() > 3 {
+
+            let (first, last) = input.split_at(2);
+
+            match first {
+                "0x" => Int { magnitude: base16::from(last), sign: false },
+                _ => panic!("Hex string must start with 0x!")
+            }
+
+        } else {
+            panic!("String is too short!")
         }
 
     }
 
-    pub fn to(self, radix: u8) -> String {
-        match radix {
-            2 => base2::to(self.bits),
-            10 => base10::to(self.bits),
-            16 => base16::to(self.to_bytes()),
-            _ => panic!("Unsupported radix!")
-        }
+    pub fn to_binary(self) -> String {
+        base2::to(self.magnitude)
     }
 
-    pub fn from_bytes(b: &Vec<u8>) -> Self {
+    pub fn to_decimal(self) -> String {
+        base10::to(self.magnitude)
+    }
 
-        let bits = bytes::from(&b[1..].to_vec());
-
-        match b[0] {
-            0 => Int {bits: [vec![Bit::Zero], bits].concat()},
-            1 => Int {bits: [vec![Bit::One], bits].concat()},
-            _ => panic!("Unsupported sign!")
-        }
-        
+    pub fn to_hex(self) -> String {
+        base16::to(self.to_bytes())
     }
 
     pub fn to_bytes(self) -> Vec<u8> {
-        
-        let b = bytes::to(self.bits[1..].to_vec());
+        bytes::to(self.magnitude)
+    }
 
-        match self.bits[0] {
-            Bit::One => [vec![1], b].concat(),
-            Bit::Zero => [vec![0], b].concat()
+    pub fn to_ext_bytes(self, length: usize) -> Vec<u8> {
+        bytes::to_ext(self.magnitude, length)
+    }
+
+    pub fn negative(&mut self) {
+        if self.sign == false {
+            self.sign = true
         }
+    }
 
+    pub fn positive(&mut self) {
+        if self.sign == true {
+            self.sign = false
+        }
     }
 
 }

@@ -7,29 +7,17 @@ impl BitOr for Int {
 
     type Output = Self;
     
-    fn bitor(mut self, mut b: Self) -> Self::Output {
+    fn bitor(mut self, mut other: Self) -> Self::Output {
          
         let mut res: Vec<Bit> = Vec::new();
 
-        while !self.bits.is_empty() || !b.bits.is_empty() {
+        while !self.magnitude.is_empty() || !other.magnitude.is_empty() {
 
-            let a_bit: Bit =
-                match self.bits.pop() {
-                    Some(r) => r,
-                    None => Bit::Zero
-                };
+            let self_bit: Bit = match self.magnitude.pop() { Some(r) => r, None => Bit::Zero };
 
-            let b_bit: Bit =
-                match b.bits.pop() {
-                    Some(r) => r,
-                    None => Bit::Zero
-                };
+            let other_bit: Bit = match other.magnitude.pop() { Some(r) => r, None => Bit::Zero };
 
-            let or_bit =
-                match (a_bit, b_bit) {
-                    (Bit::Zero, Bit::Zero) => Bit::Zero,
-                    _ => Bit::One
-                };
+            let or_bit = self_bit | other_bit;
 
             res.push(or_bit)
 
@@ -37,7 +25,10 @@ impl BitOr for Int {
 
         res.reverse();
 
-        Int {bits: res}
+        Int {
+            magnitude: res,
+            sign: self.sign | other.sign
+        }
 
     }
 

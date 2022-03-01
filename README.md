@@ -8,7 +8,7 @@ In your `Cargo.toml`:
 ```
 
 [dependencies]
-opis = "2.2.0"
+opis = "3.0.0"
 
 ```
 
@@ -16,13 +16,12 @@ In your Rust file:
 
 ```
 
-use opis::{Bit, Int, pow, modulo, mod_inv};
+use opis::{ Bit, Int, pow, modulo };
 
 ```
 
 ### Features
 - Representation of integers of any sign & magnitude.
-- Bits consist of a Sign Bit and Magnitude Bits.
 - The Magnitude is stored in big endian order.
 - Std Ops Int support for:-
     - Add
@@ -41,7 +40,6 @@ use opis::{Bit, Int, pow, modulo, mod_inv};
 - Arithetic functions included are:-
     - pow - Exponentiation
     - modulo
-    - mod_inv - Modular Multiplicative Inverse
 - Conversion functions support for radix 2, 10 & 16 formatted strings.
 
 ### API
@@ -128,6 +126,7 @@ if a < b {
 #### Arithetic Functions
 
 `Exponentiation`
+
 ```
 use opis::pow;
 
@@ -135,17 +134,11 @@ let e: Int = pow(&a, &b);
 ```
 
 `Modulo`
+
 ```
 use opis::modulo;
 
 let m: Int = modulo(&a, &b);
-```
-
-`Modular multiplicative inverse`
-```
-use opis::mod_inv;
-
-let i: Int = mod_inv(&a, &b);
 ```
 
 #### Conversion Functions
@@ -153,22 +146,22 @@ let i: Int = mod_inv(&a, &b);
 `From Str`
 ```
 
-let binary_integer: Int = Int::from("b'1010101");
+let binary_integer: Int = Int::from_binary("b'1010101");
 
-let decimal_integer: Int = Int::from("674755");
+let decimal_integer: Int = Int::from_decimal("674755");
 
-let hex_integer: Int = Int::from("0x00ABC012");
+let hex_integer: Int = Int::from_hex("0x00ABC012");
 
 ```
 
 `To Str`
 ```
 
-let binary_str: String = integer_1.to(2);
+let binary_str: String = integer_1.to_binary();
 
-let decimal_str: String = integer_2.tO(10);
+let decimal_str: String = integer_2.to_decimal();
 
-let hex_str: String = integer_3.to(16);
+let hex_str: String = integer_3.to_hex();
 ```
 
 `From Bytes`
@@ -183,15 +176,16 @@ let integer: Int = Int::from_bytes(&bytes);
 
 let bytes: Vec<u8> = integer.to_bytes();
 
+let ext_bytes: Vec<u8> = integer.to_ext_bytes(256);
+
 ```
 
 
 
 ### Future
 - Benchmarking Performance.
-- Two's Complement support.
 
 ### Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2022-02-09
+2022-03-01

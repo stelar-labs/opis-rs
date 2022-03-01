@@ -12,60 +12,56 @@ impl Add for Int {
     
     type Output = Self;
     
-    fn add(self, b: Self) -> Self {
+    fn add(self, other: Self) -> Self {
 
-        match (self.bits[0], b.bits[0]) {
+        match (self.sign, other.sign) {
 
-            (Bit::Zero, Bit::Zero) => Int {
-                bits: [
-                    vec![Bit::Zero],
-                    adder(self.bits[1..].to_vec(), b.bits[1..].to_vec())
-                ].concat()
+            (false, false) => Int {
+                magnitude: adder(self.magnitude, other.magnitude),
+                sign: false
             },
 
-            (Bit::One, Bit::One) => Int {
-                bits: [
-                    vec![Bit::One],
-                    adder(self.bits[1..].to_vec(), b.bits[1..].to_vec())
-                ].concat()
+            (true, true) => Int {
+                magnitude: adder(self.magnitude, other.magnitude),
+                sign: true
             },
 
-            (Bit::One, Bit::Zero) => {
+            (true, false) => {
                 
-                match comparator(&self.bits[1..].to_vec(), &b.bits[1..].to_vec()) {
+                match comparator(&self.magnitude, &other.magnitude) {
+                    
                     Ordering::Equal => Int::zero(),
+                    
                     Ordering::Greater => Int {
-                        bits: [
-                            vec![Bit::One],
-                            subtractor(self.bits[1..].to_vec(), b.bits[1..].to_vec())
-                        ].concat()
+                        magnitude: subtractor(self.magnitude, other.magnitude),
+                        sign: true
                     },
+                    
                     Ordering::Less => Int {
-                        bits: [
-                            vec![Bit::Zero],
-                            subtractor(b.bits[1..].to_vec(), self.bits[1..].to_vec())
-                        ].concat()
+                        magnitude: subtractor(other.magnitude, self.magnitude),
+                        sign: false
                     }
 
                 }
+
             },
 
-            (Bit::Zero, Bit::One) => {
+            (false, true) => {
                 
-                match comparator(&self.bits[1..].to_vec(), &b.bits[1..].to_vec()) {
+                match comparator(&self.magnitude, &other.magnitude) {
+                    
                     Ordering::Equal => Int::zero(),
+                    
                     Ordering::Greater => Int {
-                        bits: [
-                            vec![Bit::Zero],
-                            subtractor(self.bits[1..].to_vec(), b.bits[1..].to_vec())
-                        ].concat()
+                        magnitude: subtractor(self.magnitude, other.magnitude),
+                        sign: false
                     },
+                    
                     Ordering::Less => Int {
-                        bits: [
-                            vec![Bit::One],
-                            subtractor(b.bits[1..].to_vec(), self.bits[1..].to_vec())
-                        ].concat()
+                        magnitude: subtractor(other.magnitude, self.magnitude),
+                        sign: true
                     }
+
                 }
 
             }

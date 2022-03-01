@@ -11,26 +11,30 @@ pub fn exponentiation(a: &Int, e:&Int) -> Int {
         Int::one()
     }
     
-    else if e.bits[0] == Bit::One {
+    else if e.sign {
         panic!("Non Integer result for negative exponent!")
     }
 
     else {
 
-        let mut res: Int = Int {bits: a.bits[1..].to_vec()};
+        let mut res: Int = Int {
+            magnitude: a.magnitude.clone(),
+            sign: false
+        };
 
-        e.bits
-        .iter()
-        .skip(1)
-        .for_each(|x| {
+        e.magnitude
+            .iter()
+            .skip(1)
+            .for_each(|x| {
 
-            res = &res * &res;
+                res = &res * &res;
 
-            if x == &Bit::One {
-                res = &res * a
+                if x == &Bit::One {
+                    res = &res * a
+                }
+                
             }
-            
-        });
+        );
 
         res
         

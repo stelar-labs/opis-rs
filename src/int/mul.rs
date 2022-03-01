@@ -7,19 +7,19 @@ impl Mul for Int {
 
     type Output = Self;
     
-    fn mul(self, b: Self) -> Self {
+    fn mul(self, other: Self) -> Self {
 
-        let product: Vec<Bit> = multiplier(self.bits[1..].to_vec(), b.bits[1..].to_vec());
+        let product: Vec<Bit> = multiplier(self.magnitude, other.magnitude);
         
-        match (self.bits[0], b.bits[0]) {
+        match (self.sign, other.sign) {
 
-            (Bit::Zero, Bit::Zero) => Int {bits: [vec![Bit::Zero], product].concat()},
+            (false, false) => Int { magnitude: product, sign: false },
 
-            (Bit::One, Bit::One) => Int {bits: [vec![Bit::Zero], product].concat()},
+            (true, true) => Int { magnitude: product, sign: false },
 
-            (Bit::Zero, Bit::One) => Int {bits: [vec![Bit::One], product].concat()},
+            (false, true) => Int { magnitude: product, sign: true },
 
-            (Bit::One, Bit::Zero) => Int {bits: [vec![Bit::One], product].concat()}
+            (true, false) => Int { magnitude: product, sign: true }
 
         } 
 
@@ -41,18 +41,18 @@ fn multiplier(a: Vec<Bit>, b: Vec<Bit>) -> Vec<Bit> {
 
     let mut res: Vec<Bit> = a.clone();
 
-    b
-    .iter()
-    .skip(1)
-    .for_each(|x| {
+    b.iter()
+        .skip(1)
+        .for_each(|x| {
 
-        res = adder(res.clone(), res.clone());
+            res = adder(res.clone(), res.clone());
+            
+            if x == &Bit::One {
+                res = adder(res.clone(), a.clone());
+            }
         
-        if x == &Bit::One {
-            res = adder(res.clone(), a.clone());
         }
-    
-    });
+    );
 
     res
     

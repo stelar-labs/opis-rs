@@ -9,24 +9,24 @@ impl Rem for Int {
 
     type Output = Self;
     
-    fn rem(self, b: Self) -> Self {
+    fn rem(self, other: Self) -> Self {
         
         if self == Int::zero() {
             Int::zero()
         }
         
-        else if b == Int::zero() {
+        else if other == Int::zero() {
             panic!("a/0 is undefined!")
         }
         
         else {
     
-            let (_, r) = divisor(self.bits[1..].to_vec(), b.bits[1..].to_vec());
+            let (_, r) = divisor(self.magnitude, other.magnitude);
     
-            if self.bits[0] == Bit::One && r != vec![Bit::Zero] {
-                Int {bits: [vec![Bit::One], r].concat()}
+            if self.sign && r != vec![Bit::Zero] {
+                Int { magnitude: r, sign: true }
             } else {
-                Int {bits: [vec![Bit::Zero], r].concat()}
+                Int { magnitude: r, sign: false }
             }
     
         }

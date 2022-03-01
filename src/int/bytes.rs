@@ -53,3 +53,28 @@ pub fn to(mut bits: Vec<Bit>) -> Vec<u8> {
     res
 
 }
+
+pub fn to_ext(bits: Vec<Bit>, length: usize) -> Vec<u8> {
+
+    let mut res: Vec<u8> = to(bits);
+
+    if res.len() > length {
+
+        res[(res.len() - length)..].to_vec()
+
+    } else if res.len() == length {
+        res
+    } else {
+        
+        res.reverse();
+    
+        while res.len() < length {
+            res.push(0)
+        }
+        res.reverse();
+        
+        res
+
+    }
+
+}
