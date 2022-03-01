@@ -8,7 +8,7 @@ In your `Cargo.toml`:
 ```
 
 [dependencies]
-opis = "3.0.0"
+opis = "3.0.1"
 
 ```
 
@@ -176,7 +176,7 @@ let integer: Int = Int::from_bytes(&bytes);
 
 let bytes: Vec<u8> = integer.to_bytes();
 
-let ext_bytes: Vec<u8> = integer.to_ext_bytes(256);
+let ext_bytes: Vec<u8> = integer.to_ext_bytes(32);
 
 ```
 
