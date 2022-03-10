@@ -8,7 +8,7 @@ In your `Cargo.toml`:
 ```
 
 [dependencies]
-opis = "3.0.1"
+opis = "3.0.2"
 
 ```
 

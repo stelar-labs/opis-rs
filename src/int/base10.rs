@@ -40,7 +40,7 @@ pub fn from(mut s: &str) -> Vec<Bit> {
 
 }
 
-pub fn to(bits: Vec<Bit>) -> String {
+pub fn to(bits: &Vec<Bit>) -> String {
 
     let mut res: String = "0".to_string();
 

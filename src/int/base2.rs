@@ -27,7 +27,7 @@ pub fn from(s: &str) -> Vec<Bit> {
 
 }
 
-pub fn to(bits: Vec<Bit>) -> String {
+pub fn to(bits: &Vec<Bit>) -> String {
 
     let mut res: String = String::new();
 

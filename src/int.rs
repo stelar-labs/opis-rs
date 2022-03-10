@@ -86,24 +86,24 @@ impl Int {
 
     }
 
-    pub fn to_binary(self) -> String {
-        base2::to(self.magnitude)
+    pub fn to_binary(&self) -> String {
+        base2::to(&self.magnitude)
     }
 
-    pub fn to_decimal(self) -> String {
-        base10::to(self.magnitude)
+    pub fn to_decimal(&self) -> String {
+        base10::to(&self.magnitude)
     }
 
-    pub fn to_hex(self) -> String {
+    pub fn to_hex(&self) -> String {
         base16::to(self.to_bytes())
     }
 
-    pub fn to_bytes(self) -> Vec<u8> {
-        bytes::to(self.magnitude)
+    pub fn to_bytes(&self) -> Vec<u8> {
+        bytes::to(self.magnitude.clone())
     }
 
-    pub fn to_ext_bytes(self, length: usize) -> Vec<u8> {
-        bytes::to_ext(self.magnitude, length)
+    pub fn to_ext_bytes(&self, length: usize) -> Vec<u8> {
+        bytes::to_ext(self.magnitude.clone(), length)
     }
 
     pub fn negative(&mut self) {
