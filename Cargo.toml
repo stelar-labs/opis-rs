@@ -1,6 +1,6 @@
 [package]
 name = "opis"
-version = "3.0.3"
+version = "3.0.4"
 edition = "2018"
 license = "MIT"
 description = "Opis is an arithmetic library for integer numbers written in Rust."

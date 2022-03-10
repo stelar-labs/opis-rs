@@ -1,20 +1,11 @@
 
 use crate::Bit;
 
-pub fn from(mut s: &str) -> Vec<Bit> {
+pub fn from(arg: &str) -> Vec<Bit> {
 
-    let mut sign_bit: Bit = Bit::Zero;
+    let mut res: Vec<Bit> = Vec::new();
 
-    let (first, last) = s.split_at(1);
-    
-    if first == "-" {
-        sign_bit = Bit::One;
-        s = last
-    }
-
-    let mut bits: Vec<Bit> = Vec::new();
-
-    let mut i_str = s.to_string();
+    let mut i_str = arg.to_string();
 
     while i_str != "0".to_string() {
 
@@ -23,20 +14,20 @@ pub fn from(mut s: &str) -> Vec<Bit> {
         i_str = s_half;
 
         match rem {
-            0 => bits.push(Bit::Zero),
-            1 => bits.push(Bit::One),
+            0 => res.push(Bit::Zero),
+            1 => res.push(Bit::One),
             _ => panic!("Unsupported bit type {}", rem)
         }
 
     }
 
-    bits.reverse();
+    res.reverse();
 
-    if bits.is_empty() {
-        bits = vec![Bit::Zero]
+    if res.is_empty() {
+        res = vec![Bit::Zero]
     }
     
-    [vec![sign_bit], bits].concat()
+    res
 
 }
 
@@ -44,23 +35,17 @@ pub fn to(bits: &Vec<Bit>) -> String {
 
     let mut res: String = "0".to_string();
 
-    for b in bits[1..].to_vec() {
+    for b in bits {
 
         res = double(&res);
 
-        if b == Bit::One {
+        if b == &Bit::One {
             res = add_one(&res);
         }
 
     }
-
-    if bits[0] == Bit::One {
-        format!("-{}", res)
-    }
-
-    else {
-        res
-    }
+    
+    res
 
 }
 

@@ -91,7 +91,15 @@ impl Int {
     }
 
     pub fn to_decimal(&self) -> String {
-        base10::to(&self.magnitude)
+
+        let magnitude_str = base10::to(&self.magnitude);
+
+        if self.sign {
+            format!("-{}", magnitude_str)
+        } else {
+            magnitude_str
+        }
+        
     }
 
     pub fn to_hex(&self) -> String {
