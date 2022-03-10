@@ -8,7 +8,7 @@ In your `Cargo.toml`:
 ```
 
 [dependencies]
-opis = "3.0.2"
+opis = "3.0.3"
 
 ```
 
@@ -188,4 +188,4 @@ let ext_bytes: Vec<u8> = integer.to_ext_bytes(32);
 ### Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2022-03-01
+2022-03-10

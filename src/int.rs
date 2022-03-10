@@ -55,7 +55,7 @@ impl Int {
 
     pub fn from_decimal(input: &str) -> Self {
 
-        if input.len() > 1 {
+        if input.len() > 0 {
 
             let (first, last) = input.split_at(1);
 
