@@ -6,7 +6,7 @@ pub fn from(bytes: &Vec<u8>) -> Vec<Bit> {
 
     let bin_str: String = bytes
         .iter()
-        .fold(String::new(), |acc, x| format!("{}{:b}", acc, x));
+        .fold(String::new(), |acc, x| format!("{}{:08b}", acc, x));
 
     for i in bin_str.chars() {
         match i {
