@@ -8,7 +8,7 @@ In your `Cargo.toml`:
 ```
 
 [dependencies]
-opis = "3.0.4"
+opis = "3.0.5"
 
 ```
 
@@ -21,8 +21,8 @@ use opis::{ Bit, Int, pow, modulo };
 ```
 
 ### Features
-- Representation of integers of any sign & magnitude.
-- The Magnitude is stored in big endian order.
+- Representation of integers of any sign & magnitude
+- The Magnitude is stored in big endian order
 - Std Ops Int support for:-
     - Add
     - AddAssign
@@ -38,9 +38,10 @@ use opis::{ Bit, Int, pow, modulo };
     - Eq
     - Ord
 - Arithetic functions included are:-
-    - pow - Exponentiation
+    - pow - exponentiation
     - modulo
-- Conversion functions support for radix 2, 10 & 16 formatted strings.
+- Conversion functions support for radix 2, 10 & 16 formatted strings
+- Linear-feedback shift register
 
 ### API
 
@@ -180,12 +181,19 @@ let ext_bytes: Vec<u8> = integer.to_ext_bytes(32);
 
 ```
 
+#### Linear-feedback shift register
 
+```
+
+integer.lsfr();
+
+```
 
 ### Future
-- Benchmarking Performance.
+- Benchmarking Performance
+- Two's Complement support
 
 ### Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2022-03-10
+2022-03-16

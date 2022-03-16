@@ -1,26 +1,22 @@
-use crate::Bit;
-use crate::Int;
-
-pub mod cmp;
-pub mod eq;
-
-pub mod add;
-pub mod sub;
-pub mod mul;
-pub mod div;
-pub mod rem;
-
-pub mod not;
-pub mod and;
-pub mod or;
-pub mod xor;
-
-pub mod pow;
 
 mod base2;
 mod base10;
 mod base16;
 mod bytes;
+pub mod add;
+pub mod and;
+pub mod cmp;
+pub mod div;
+pub mod eq;
+pub mod mul;
+pub mod not;
+pub mod or;
+pub mod pow;
+pub mod rem;
+pub mod sub;
+pub mod xor;
+use crate::Bit;
+use crate::Int;
 
 impl Int {
 
@@ -123,6 +119,17 @@ impl Int {
     pub fn positive(&mut self) {
         if self.sign == true {
             self.sign = false
+        }
+    }
+
+    pub fn lfsr(&mut self) {
+        
+        if !self.magnitude.iter().all(|&x| x == Bit::Zero) && self.magnitude.len() > 2 {
+
+            self.magnitude.push(self.magnitude[0] ^ self.magnitude[1]);
+
+            self.magnitude.remove(0);
+            
         }
     }
 
