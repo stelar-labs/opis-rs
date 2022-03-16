@@ -8,7 +8,7 @@ In your `Cargo.toml`:
 ```
 
 [dependencies]
-opis = "3.0.5"
+opis = "3.0.6"
 
 ```
 
@@ -185,7 +185,7 @@ let ext_bytes: Vec<u8> = integer.to_ext_bytes(32);
 
 ```
 
-integer.lsfr();
+let int_lsfr: Int = integer.lfsr();
 
 ```
 

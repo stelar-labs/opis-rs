@@ -122,15 +122,18 @@ impl Int {
         }
     }
 
-    pub fn lfsr(&mut self) {
+    pub fn lfsr(mut self) -> Int {
         
         if !self.magnitude.iter().all(|&x| x == Bit::Zero) && self.magnitude.len() > 2 {
 
             self.magnitude.push(self.magnitude[0] ^ self.magnitude[1]);
 
             self.magnitude.remove(0);
-            
+
         }
+
+        self
+        
     }
 
 }
