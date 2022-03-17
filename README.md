@@ -185,15 +185,17 @@ let ext_bytes: Vec<u8> = integer.to_ext_bytes(32);
 
 ```
 
-let int_lsfr: Int = integer.lfsr();
+let int_lfsr: Int = integer.lfsr();
 
 ```
 
 ### Future
 - Benchmarking Performance
 - Two's Complement support
+- The Extended Euclidean Algorithm
+- Modular Multiplicative Inverse
 
 ### Contribution
 Pull requests, bug reports and any kind of suggestion are welcome.
 
-2022-03-16
+2022-03-17
