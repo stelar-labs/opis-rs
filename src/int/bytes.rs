@@ -1,6 +1,6 @@
 use crate::Bit;
 
-pub fn from(bytes: &Vec<u8>) -> Vec<Bit> {
+pub fn from(bytes: &[u8]) -> Vec<Bit> {
 
     let mut res: Vec<Bit> = Vec::new();
 

@@ -45,7 +45,7 @@ impl Int {
 
     }
 
-    pub fn from_bytes(input: &Vec<u8>) -> Self {
+    pub fn from_bytes(input: &[u8]) -> Self {
         Int { magnitude: bytes::from(input), sign: false }
     }
 
