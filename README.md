@@ -1,4 +1,4 @@
-# Rust Opis
+# Opis
 
 Opis is an arithmetic library for integer numbers.
 
