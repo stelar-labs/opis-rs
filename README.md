@@ -7,6 +7,7 @@ Opis is an arithmetic library for integer numbers.
 Roy R. O. Okello
 
 [Github](https://github.com/0xR3y)
+
 [Email](mailto:0xR3y@protonmail.com)
 
 ## Usage
