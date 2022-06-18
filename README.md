@@ -2,194 +2,98 @@
 
 Opis is an arithmetic library for integer numbers.
 
+## Author
+
+Roy R. O. Okello
+
+[Github] <https://github.com/0xR3y>
+[Email] <mailto:0xR3y@protonmail.com>
+
 ## Usage
 
 In your `Cargo.toml`:
 
 ```text
 [dependencies]
-opis = "3.1.0"
+opis = "4.0.0"
 ```
 
 In your `module.rs`:
 
 ```text
-use opis::{ Bit, Int, pow, modulo };
+use opis::{Bit, Int};
 ```
 
 ## Features
 
-- Representation of integers of any sign & magnitude.
-- The Magnitude is stored in big endian order.
-- Std Ops Int support for Add, AddAssign, Sub, SubAssign, Mul, Div, Rem, Not, BitAnd, BitOr, BitXor, Eq and Ord.
-- Arithetic functions included are pow - exponentiation and modulo.
-- Conversion functions support for radix 2, 10 & 16 formatted strings.
-- Linear-feedback shift register.
+- Representation of integers of any magnitude.
+- Bits are in two's complement and big endian order.
+- Functions for arithmetic and conversions.
 
 ## API
 
-### Operators
+### Int
 
-`Add`
+- `Add: a + b`
 
-```text
-let sum: Int = a + b;
-```
+- `AddAssign: a += b`
 
-`AddAssign`
+- `Sub: a - b`
 
-```text
-let total: Int = a += b;
-```
+- `SubAssign: a -= b`
 
-`Sub`
+- `Mul: a * b`
 
-```text
-let sum: Int = a - b;
-```
+- `Div: a / b`
 
-`SubAssign`
+- `Rem: a % b`
 
-```text
-let reduced: Int = a -= b;
-```
+- `Not: !a`
 
-`Mul`
+- `BitAnd: a & b`
 
-```text
-let product: Int = a * b;
-```
+- `BitOr: a | b`
 
-`Div`
+- `BitXor: a ^ b`
 
-```text
-let quotient: Int = a / b;
-```
+- `Eq: a == b`
 
-`Rem`
+- `Ord: a > b`
 
-```text
-let rem: Int = a % b;
-```
+- `Shift: a >> 1`
 
-`Not`
+- `Shift Assign: a >>= 1`
 
-```text
-let not_a: Int = !a;
-```
+- `Exponentiation: a.pow(&e)`
 
-`BitAnd`
+- `Modulo: a.modulo(&m)`
 
-```text
-let a_and_b: Int = a & b;
-```
+- `From Binary: Int::from_bin("b'1010101")`
 
-`BitOr`
+- `To Binary: a.to_bin()`
 
-```text
-let a_or_b: Int = a | b;
-```
+- `From Decimal: Int::from_decimal("674755")`
 
-`BitXor`
+- `To Decimal: a.to_dec()`
 
-```text
-let a_xor_b: Int = a ^ b;
-```
+- `From Hexadecimal: Int::from_hex("0x00ABC012")`
 
-`Eq`
+- `To Hexadecimal: a.to_hex()`
 
-```text
-if a == b {
-    println!("equal!")
-}
+- `From Bytes: Int::from_bytes(&bytes)`
 
-if a != b {
-    println!("not equal!")
-}
-```
+- `To Bytes: a.to_bytes()`
 
-`Ord`
+- `To Extended Bytes: a.to_ext_bytes(32)`
 
-```text
-if a > b {
-    println!("a is greater!")
-}
+- `To Extended Bits: a.to_ext_bits(256)`
 
-if a < b {
-    println!("a is less!")
-}
-```
-
-### Arithetic Functions
-
-`Exponentiation`
-
-```text
-use opis::pow;
-
-let e: Int = pow(&a, &b);
-```
-
-`Modulo`
-
-```text
-use opis::modulo;
-
-let m: Int = modulo(&a, &b);
-```
-
-### Conversion Functions
-
-`From Str`
-
-```text
-let binary_integer: Int = Int::from_binary("b'1010101");
-
-let decimal_integer: Int = Int::from_decimal("674755");
-
-let hex_integer: Int = Int::from_hex("0x00ABC012");
-```
-
-`To Str`
-
-```text
-let binary_str: String = integer_1.to_binary();
-
-let decimal_str: String = integer_2.to_decimal();
-
-let hex_str: String = integer_3.to_hex();
-```
-
-`From Bytes`
-
-```text
-let integer: Int = Int::from_bytes(&bytes);
-```
-
-`To Bytes`
-
-```text
-let bytes: Vec<u8> = integer.to_bytes();
-
-let ext_bytes: Vec<u8> = integer.to_ext_bytes(32);
-```
-
-#### Linear-feedback shift register
-
-```text
-let int_lfsr: Int = integer.lfsr();
-```
-
-## Improvements
-
-- Performance
-- Two's Complement Format
-- Extended Euclidean Algorithm
-- Modular Arithmetic
-- Fibonacci Linear-Feedback Shift Register
+- `Linear-feedback shift register: a.lfsr(1)`
 
 ## Contribution
 
-Pull requests, bug reports and any kind of suggestion are welcome.
+Pull requests, bug reports and any kind of suggestions are welcome.
 
-2022-04-30
+[Twitter] <https://twitter.com/StelarLabs>
+
+2022-06-18

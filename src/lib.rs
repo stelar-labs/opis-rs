@@ -12,11 +12,3 @@ pub enum Bit {
 pub struct Int {
     pub bits: Vec<Bit>
 }
-
-// pub fn modulo(a: &Int, b: &Int) -> Int {
-//     modular::modulo::main(a, b)
-// }
-
-// pub fn pow(a: &Int, e:&Int) -> Int {
-//     int::pow::exponentiation(a, e)
-// }
