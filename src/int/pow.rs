@@ -1,43 +1,47 @@
-use crate::Bit;
-use crate::Int;
+use crate::{ Bit, Int };
+use std::error::Error;
 
-pub fn exponentiation(a: &Int, e:&Int) -> Int {
+impl Int {
 
-    if a == &Int::zero() {
-        Int::zero()
-    }
-    
-    else if e == &Int::zero() {
-        Int::one()
-    }
-    
-    else if e.sign {
-        panic!("Non Integer result for negative exponent!")
-    }
+    pub fn pow(&self, e: &Int) -> Result<Int, Box<dyn Error>> {
+        
+        if self == &Int::zero() {
+            
+            Ok(Int::zero())
+        
+        } else if e == &Int::zero() {
+            
+            Ok(Int::one())
+        
+        } else if e.bits[0] == Bit::One {
+            
+            Err("Non Integer result for negative exponent!")?
 
-    else {
+        } else {
 
-        let mut res: Int = Int {
-            magnitude: a.magnitude.clone(),
-            sign: false
-        };
+            let mut result = self.clone();
 
-        e.magnitude
-            .iter()
-            .skip(1)
-            .for_each(|x| {
+            e.bits
+                .iter()
+                .skip(2)
+                .for_each(|x| {
 
-                res = &res * &res;
+                    result = &result * &result;
 
-                if x == &Bit::One {
-                    res = &res * a
+                    if x == &Bit::One {
+
+                        result = &result * self
+
+                    }
+                    
                 }
                 
-            }
-        );
+            );
 
-        res
-        
+            Ok(result)
+            
+        }
+
     }
 
 }

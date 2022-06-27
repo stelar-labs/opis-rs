@@ -1,6 +1,6 @@
 mod bit;
 mod int;
-mod modular;
+// mod modular;
 
 #[derive(Copy, Clone, Debug)]
 pub enum Bit {
@@ -10,14 +10,5 @@ pub enum Bit {
 
 #[derive(Clone, Debug)]
 pub struct Int {
-    pub magnitude: Vec<Bit>,
-    pub sign: bool
-}
-
-pub fn modulo(a: &Int, b: &Int) -> Int {
-    modular::modulo::main(a, b)
-}
-
-pub fn pow(a: &Int, e:&Int) -> Int {
-    int::pow::exponentiation(a, e)
+    pub bits: Vec<Bit>
 }

@@ -1,37 +1,97 @@
+use crate::{Bit, Int};
+use std::error::Error;
 
-use crate::Bit;
+impl Int {
 
-pub fn from(arg: &str) -> Vec<Bit> {
+    pub fn from_dec(arg: &str) -> Result<Self, Box<dyn Error>> {
 
-    let mut res: Vec<Bit> = Vec::new();
+        if arg.len() > 0 {
+            
+            let (first, last) = arg.split_at(1);
+            
+            let (decimal_string, sign) =
+            
+                match first {
 
-    let mut i_str = arg.to_string();
+                    "-" => (last, true),
 
-    while i_str != "0".to_string() {
+                    _ => (arg, false)
 
-        let (s_half, rem) = half(&i_str);
+                };
 
-        i_str = s_half;
+            let mut bits: Vec<Bit> = Vec::new();
 
-        match rem {
-            0 => res.push(Bit::Zero),
-            1 => res.push(Bit::One),
-            _ => panic!("Unsupported bit type {}", rem)
+            let mut i_str = decimal_string.to_string();
+
+            while i_str != "0".to_string() {
+
+                let (s_half, rem) = half(&i_str);
+
+                i_str = s_half;
+
+                match rem {
+
+                    0 => bits.push(Bit::Zero),
+
+                    1 => bits.push(Bit::One),
+
+                    _ => Err("Internal error!")?
+
+                }
+
+            }
+
+            bits.reverse();
+            
+            if bits.is_empty() {
+                    
+                Ok(Int::zero())
+
+            } else {
+
+                bits = [vec![Bit::One], bits].concat();
+
+                let result = Int { bits };
+
+                if sign {
+
+                    Ok(result.negative())
+
+                } else {
+
+                    Ok(result)
+
+                }
+
+            }
+            
+        } else {
+
+            Err("Internal error!")?
+        
         }
 
     }
 
-    res.reverse();
+    pub fn to_dec(&self) -> String {
+        
+        if self.bits[0] == Bit::One {
 
-    if res.is_empty() {
-        res = vec![Bit::Zero]
+            let positive = self.positive();
+
+            bits_to_dec_string(&positive.bits[1..])
+
+        } else {
+
+            bits_to_dec_string(&self.bits[1..])
+
+        }
+
     }
-    
-    res
 
 }
 
-pub fn to(bits: &Vec<Bit>) -> String {
+fn bits_to_dec_string(bits: &[Bit]) -> String {
 
     let mut res: String = "0".to_string();
 
@@ -40,7 +100,9 @@ pub fn to(bits: &Vec<Bit>) -> String {
         res = double(&res);
 
         if b == &Bit::One {
+
             res = add_one(&res);
+
         }
 
     }

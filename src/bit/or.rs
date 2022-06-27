@@ -5,11 +5,28 @@ impl BitOr for Bit {
 
     type Output = Self;
     
-    fn bitor(self, other: Self) -> Self::Output {
-        match (self, other) {
-            (Bit::Zero, Bit::Zero) => Bit::Zero,
-            _ => Bit::One
-        }
+    fn bitor(self, b: Self) -> Self::Output {
+        or(&self, &b)
+    }
+
+}
+
+impl BitOr for &Bit {
+
+    type Output = Bit;
+
+    fn bitor(self, b: Self) -> Bit {
+        or(self, b)
+    }
+    
+}
+
+fn or(a: &Bit, b: &Bit) -> Bit {
+
+    if a == &Bit::Zero &&  b == &Bit::Zero {
+        Bit::Zero
+    } else {
+        Bit::One
     }
 
 }
