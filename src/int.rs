@@ -867,7 +867,7 @@ impl Int {
         !self + Int::one()
     }
 
-    pub fn lfsr(&self, iterations: usize) -> Result<Self, Box<dyn Error>> {
+    pub fn lfsr(&self, iterations: usize) -> Self {
 
         let mut result = self.clone();
         
@@ -899,7 +899,7 @@ impl Int {
 
         }
 
-        Ok(result)
+        result
 
     }
 
@@ -1296,7 +1296,7 @@ mod tests {
     }
     #[test]
     fn test_lfsr() {
-        assert_eq!(Int::one().lfsr(1).unwrap(), Int {bits: vec![Bit::Zero ^ Bit::One, Bit::Zero]})
+        assert_eq!(Int::one().lfsr(1), Int {bits: vec![Bit::Zero ^ Bit::One, Bit::Zero]})
     }
     #[test]
     fn test_eq() {
