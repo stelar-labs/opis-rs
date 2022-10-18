@@ -6,97 +6,97 @@ Opis is an arithmetic library for integer numbers.
 
 Roy R. O. Okello
 
-[Email](mailto:0xR3y@protonmail.com)
+[Email](mailto:royokello@protonmail.com)
 
-[Github](https://github.com/0xR3y)
+[Github](https://github.com/royokello)
 
-[Twitter](https://twitter.com/0xR3y)
+[Twitter](https://twitter.com/RealOkello)
 
 ## Usage
 
-In your `Cargo.toml`:
+### Cargo.toml
 
 ```text
 [dependencies]
-opis = "4.0.0"
+opis = "4.1.0"
 ```
 
-In your `module.rs`:
+### Module.rs
 
 ```text
-use opis::{Bit, Int};
+use opis::{ Bit, Int };
 ```
-
-## Features
-
-- Representation of integers of any magnitude.
-- Bits are in two's complement and big endian order.
-- Functions for arithmetic and conversions.
 
 ## API
 
+### Bit
+
+```
+
+add: a + b
+
+and: a & b
+
+eq: a == a
+
+not: !a
+
+or: a | b
+
+xor: a ^ b
+
+```
+
 ### Int
 
-- `Add: a + b`
+```
 
-- `AddAssign: a += b`
+addition: a + b, a += b
 
-- `Sub: a - b`
+and: a & b
 
-- `SubAssign: a -= b`
+base2: Int::from_bin("1010101"), a.to_bin()
 
-- `Mul: a * b`
+base10: Int::from_dec("674755"), a.to_dec()
 
-- `Div: a / b`
+base16: Int::from_hex("00ABC012"), a.to_hex()
 
-- `Rem: a % b`
+bytes: Int::from(&bytes), a.into()
 
-- `Not: !a`
+extended bits: a.to_ext_bits(256)
 
-- `BitAnd: a & b`
+extended bytes: a.to_ext_bytes(32)
 
-- `BitOr: a | b`
+comparision: a < b, a <= b, a > b, a >= b
 
-- `BitXor: a ^ b`
+division: a / b
 
-- `Eq: a == b`
+equivalence: a == b
 
-- `Ord: a > b`
+linear feedback shift register: a.lfsr(1)?
 
-- `Shift: a >> 1`
+modulo: a.modulo(&m)
 
-- `Shift Assign: a >>= 1`
+multiply: a * b, a *= b
 
-- `Exponentiation: a.pow(&e)`
+negate: a.negate()
 
-- `Modulo: a.modulo(&m)`
+not: !a
 
-- `From Binary: Int::from_bin("b'1010101")`
+or: a | b
 
-- `To Binary: a.to_bin()`
+exponentiation: a.pow(e)
 
-- `From Decimal: Int::from_decimal("674755")`
+remainder: a % b
 
-- `To Decimal: a.to_dec()`
+shift left: a << 1, a <<= 1
 
-- `From Hexadecimal: Int::from_hex("0x00ABC012")`
+shift right: a >> 1, a >>= 1
 
-- `To Hexadecimal: a.to_hex()`
+subtraction: a - b, a -= b
 
-- `From Bytes: Int::from_bytes(&bytes)`
-
-- `To Bytes: a.to_bytes()`
-
-- `To Extended Bytes: a.to_ext_bytes(32)`
-
-- `To Extended Bits: a.to_ext_bits(256)`
-
-- `Linear-feedback shift register: a.lfsr(1)`
-
-## Contribution
-
-Pull requests, bug reports and any kind of suggestions are welcome.
+```
 
 [Twitter](https://twitter.com/StelarLabs)
 
-2022-06-18
+2022-10-18

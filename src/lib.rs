@@ -1,14 +1,8 @@
 mod bit;
 mod int;
-// mod modular;
 
 #[derive(Copy, Clone, Debug)]
-pub enum Bit {
-    One,
-    Zero
-}
+pub enum Bit { One, Zero }
 
-#[derive(Clone, Debug)]
-pub struct Int {
-    pub bits: Vec<Bit>
-}
+#[derive(Clone)]
+pub struct Int { bits: Vec<Bit> }
