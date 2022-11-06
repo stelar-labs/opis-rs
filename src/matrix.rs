@@ -1,0 +1,10 @@
+mod addition;
+mod equality;
+mod determinant;
+mod dimensions;
+mod identity;
+mod inverse;
+mod multiplication;
+mod subtraction;
+mod trace;
+mod transpose;

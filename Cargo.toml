@@ -1,9 +1,9 @@
 [package]
 name = "opis"
-version = "4.1.0"
+version = "5.0.0"
 edition = "2021"
 license = "MIT"
-description = "Opis is an arithmetic library for integer numbers."
+description = "Opis is a library for rational number and matrix arithmetic."
 repository = "https://github.com/stelar-labs/opis-rs"
 readme = "README.md"
 
