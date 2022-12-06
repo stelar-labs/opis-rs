@@ -61,7 +61,21 @@ impl Ord for Integer {
 }
 
 impl PartialOrd for Integer {
+
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
+    
+}
+
+#[cfg(test)]
+mod tests {
+    
+    use super::*;
+
+    #[test]
+    fn test_cmp() {
+        assert!(Integer::three() > Integer::two());
+    }
+
 }

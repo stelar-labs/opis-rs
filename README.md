@@ -18,7 +18,7 @@ Roy R. O. Okello
 
 ```text
 [dependencies]
-opis = "5.0.1"
+opis = "5.0.2"
 ```
 
 ### Module.rs
@@ -135,4 +135,4 @@ Trace `a.trace()`
 
 Transpose `a.transpose()`
 
-2022-11-29
+2022-12-06

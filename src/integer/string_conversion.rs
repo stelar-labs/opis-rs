@@ -141,39 +141,63 @@ impl Integer {
 
     }
 
-    pub fn from_hex(str: &str) -> Result<Self, Box<dyn Error>> {
+    pub fn from_hex(arg: &str) -> Result<Self, Box<dyn Error>> {
 
-        if str.len() > 0 {
+        if arg.len() > 0 {
 
-            let mut bin_str = String::new();
+            let upper_str = arg.to_uppercase();
             
-            let hex_chars = str.chars().collect::<Vec<_>>();
+            let hex_chars = upper_str.chars().collect::<Vec<_>>();
 
-            for hex_char in hex_chars {
+            let bin_ops: Vec<Option<String>> = hex_chars
+                .iter()
+                .map(|x| {
 
-                match hex_char {
-                    '0' => bin_str.push_str("0000"),
-                    '1' => bin_str.push_str("0001"),
-                    '2' => bin_str.push_str("0010"),
-                    '3' => bin_str.push_str("0011"),
-                    '4' => bin_str.push_str("0100"),
-                    '5' => bin_str.push_str("0101"),
-                    '6' => bin_str.push_str("0110"),
-                    '7' => bin_str.push_str("0111"),
-                    '8' => bin_str.push_str("1000"),
-                    '9' => bin_str.push_str("1001"),
-                    'A' => bin_str.push_str("1010"),
-                    'B' => bin_str.push_str("1011"),
-                    'C' => bin_str.push_str("1100"),
-                    'D' => bin_str.push_str("1101"),
-                    'E' => bin_str.push_str("1110"),
-                    'F' => bin_str.push_str("1111"),
-                    _ => Err("Internal error!")?             
-                }
+                    match x {
+                        '0' => Some("0000".to_string()),
+                        '1' => Some("0001".to_string()),
+                        '2' => Some("0010".to_string()),
+                        '3' => Some("0011".to_string()),
+                        '4' => Some("0100".to_string()),
+                        '5' => Some("0101".to_string()),
+                        '6' => Some("0110".to_string()),
+                        '7' => Some("0111".to_string()),
+                        '8' => Some("1000".to_string()),
+                        '9' => Some("1001".to_string()),
+                        'A' => Some("1010".to_string()),
+                        'B' => Some("1011".to_string()),
+                        'C' => Some("1100".to_string()),
+                        'D' => Some("1101".to_string()),
+                        'E' => Some("1110".to_string()),
+                        'F' => Some("1111".to_string()),
+                        _ => None            
+                    }
+
+                })
+                .collect();
+
+            let err_check = bin_ops
+                .iter()
+                .any(|x| {
+                    match x {
+                        Some(_) => false,
+                        None => true
+                    }
+                });
+
+            if err_check {
+
+                Err("Internal error!")?
+
+            } else {
+
+                let bin_strs: Vec<String> = bin_ops.iter().map(|x| x.clone().unwrap()).collect();
+
+                let bin_str = bin_strs.concat();
+
+                Integer::from_bin(&bin_str)
 
             }
-
-            Integer::from_bin(&bin_str)
 
         } else {
             

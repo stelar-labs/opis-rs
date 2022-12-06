@@ -52,13 +52,21 @@ impl Into<Vec<u8>> for &Integer{
     }
 }
 
-fn bits_to_bytes(bits: &[Bit]) -> Vec<u8> {
+pub fn bits_to_bytes(bits: &[Bit]) -> Vec<u8> {
 
     let mut bytes = vec![];
 
-    let r = 8 - (bits.len() % 8);
+    let r = bits.len() % 8;
 
-    let mut byte = vec![bits[0]; r];
+    let mut byte = if r != 0 {
+        
+        vec![bits[0]; 8 - r]
+
+    } else {
+
+        vec![]
+
+    };
 
     bits
     .iter()
@@ -144,16 +152,20 @@ impl Into<u128> for &Integer{
     }
 }
 
-impl From<&usize> for Integer{
+impl From<&usize> for Integer {
+
     fn from(value: &usize) -> Self {
-        Integer::from(&value.to_le_bytes()[..])
+        Integer::from(&value.to_be_bytes()[..])
     }
+
 }
 
-impl Into<usize> for &Integer{
+impl Into<usize> for &Integer {
+    
     fn into(self) -> usize {
         usize::from_be_bytes(self.to_ext_bytes((usize::BITS/8) as usize).try_into().unwrap())
     }
+
 }
 
 #[cfg(test)]
