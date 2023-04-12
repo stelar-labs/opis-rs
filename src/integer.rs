@@ -19,6 +19,7 @@ mod type_conversion;
 mod xor;
 use crate::{Bit, Integer};
 use std::error::Error;
+mod mod_pow;
 
 impl Integer {
 

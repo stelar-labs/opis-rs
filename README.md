@@ -18,7 +18,7 @@ Roy R. O. Okello
 
 ```text
 [dependencies]
-opis = "5.0.2"
+opis = "5.1.0"
 ```
 
 ### Module.rs
@@ -72,6 +72,8 @@ Extended Bytes `a.to_ext_bytes(32)`
 Linear Feedback Shift Register `a.lfsr(1)?`
 
 Modulo: `a.modulo(&m)`
+
+Modular Exponentiation: `base.mod_pow(&exponent, &modulus)`
 
 Multiply `a * b, a *= b`
 
@@ -135,4 +137,4 @@ Trace `a.trace()`
 
 Transpose `a.transpose()`
 
-2022-12-06
+2023-04-13
