@@ -4,6 +4,7 @@ mod determinant;
 mod dimensions;
 mod identity;
 mod inverse;
+mod minors;
 mod multiplication;
 mod subtraction;
 mod trace;

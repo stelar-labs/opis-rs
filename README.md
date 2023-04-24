@@ -12,13 +12,15 @@ Roy R. O. Okello
 
 [Twitter](https://twitter.com/RealOkello)
 
+## Features
+
 ## Usage
 
 ### Cargo.toml
 
 ```text
 [dependencies]
-opis = "5.1.0"
+opis = "5.2.0"
 ```
 
 ### Module.rs
@@ -27,9 +29,9 @@ opis = "5.1.0"
 use opis::{ Bit, Integer, Fraction, Matrix };
 ```
 
-## API
+### API
 
-### Bit
+#### Bit
 
 Add `a + b`
 
@@ -43,7 +45,7 @@ Or `a | b`
 
 Xor `a ^ b`
 
-### Integer
+#### Integer
 
 Addition `a + b, a += b`
 
@@ -93,7 +95,7 @@ Subtraction `a - b, a -= b`
 
 Type Conversion `2_u8.into()`
 
-### Fraction
+#### Fraction
 
 Addition `a + b, a += b`
 
@@ -115,7 +117,7 @@ Subtraction `a - b, a -= b`
 
 Type Conversion `2_u8.into()`
 
-### Matrix
+#### Matrix
 
 Addition `a + b`
 
@@ -129,6 +131,8 @@ Identity `Matrix::identity(size, zero, one)`
 
 Inverse `a.inverse(zero, one)`
 
+Minors `a.minors()`
+
 Multiplication `a * b`
 
 Subtraction `a - b`
@@ -137,4 +141,8 @@ Trace `a.trace()`
 
 Transpose `a.transpose()`
 
-2023-04-13
+## License
+
+## Disclaimer
+
+12023-04-24
