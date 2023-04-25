@@ -1,4 +1,5 @@
 mod addition;
+mod cofactors;
 mod equality;
 mod determinant;
 mod dimensions;

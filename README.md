@@ -20,7 +20,7 @@ Roy R. O. Okello
 
 ```text
 [dependencies]
-opis = "5.2.0"
+opis = "5.3.0"
 ```
 
 ### Module.rs
@@ -121,6 +121,8 @@ Type Conversion `2_u8.into()`
 
 Addition `a + b`
 
+Cofactors `a.cofactors(neg_one, one)`
+
 Determinant `a.determinant()`
 
 Dimensions `a.dimensions()`
@@ -145,4 +147,4 @@ Transpose `a.transpose()`
 
 ## Disclaimer
 
-12023-04-24
+12023-04-25
