@@ -20,7 +20,7 @@ Roy R. O. Okello
 
 ```text
 [dependencies]
-opis = "5.3.0"
+opis = "5.3.1"
 ```
 
 ### Module.rs

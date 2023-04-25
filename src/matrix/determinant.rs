@@ -9,25 +9,33 @@ where T: std::ops::Mul<Output=T> + std::ops::Sub<Output=T> + Clone {
         
         if rows == columns {
 
-            let d1 = (1..rows)
-                .into_iter()
-                .fold(
-                    self.0[0][0].clone(),
-                    |acc, x|
-                    acc * self.0[x][x].clone()
-                );
+            if rows == 1 {
 
-            let d2 = (0..rows - 1)
-                .into_iter()
-                .rev()
-                .enumerate()
-                .fold(
-                    self.0[0][rows - 1].clone(),
-                    |acc, (i,x)|
-                    acc * self.0[i + 1][x].clone()
-                );
+                Ok(self.0[0][0].clone())
 
-            Ok(d1 - d2)
+            } else {
+
+                let d1 = (1..rows)
+                    .into_iter()
+                    .fold(
+                        self.0[0][0].clone(),
+                        |acc, x|
+                        acc * self.0[x][x].clone()
+                    );
+
+                let d2 = (0..rows - 1)
+                    .into_iter()
+                    .rev()
+                    .enumerate()
+                    .fold(
+                        self.0[0][rows - 1].clone(),
+                        |acc, (i,x)|
+                        acc * self.0[i + 1][x].clone()
+                    );
+
+                Ok(d1 - d2)
+
+            }
 
         } else {
             
