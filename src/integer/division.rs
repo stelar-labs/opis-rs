@@ -79,14 +79,14 @@ impl Div for &Integer {
                 if self.0[0] == Bit::Zero {
                     self.clone()
                 } else {
-                    self.negate()
+                    self.inversion()
                 };
 
             let b_pos =
                 if b.0[0] == Bit::Zero {
                     b.clone()
                 } else {
-                    b.negate()
+                    b.inversion()
                 };
 
             let (quotient, _) = divider::run(&a_pos, &b_pos);
@@ -94,8 +94,8 @@ impl Div for &Integer {
             match (self.0[0], b.0[0]) {
                 (Bit::Zero, Bit::Zero) => Ok(quotient),
                 (Bit::One, Bit::One) => Ok(quotient),
-                (Bit::Zero, Bit::One) => Ok(quotient.negate()),
-                (Bit::One, Bit::Zero) => Ok(quotient.negate())
+                (Bit::Zero, Bit::One) => Ok(quotient.inversion()),
+                (Bit::One, Bit::Zero) => Ok(quotient.inversion())
             }
 
         }

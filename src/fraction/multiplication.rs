@@ -9,12 +9,19 @@ impl Mul for Fraction {
 }
 
 impl Mul for &Fraction {
+
     type Output = Fraction;
+
     fn mul(self, b: Self) -> Fraction {
+
         let mut result = Fraction(&self.0 * &b.0, &self.1 * &b.1);
+
         result.reduce();
+
         result
+
     }
+
 }
 
 impl Mul<&Integer> for &Fraction {
@@ -132,4 +139,37 @@ impl MulAssign<&usize> for Fraction {
         let b_frac: Fraction = b.into();
         *self = &self.clone() * &b_frac
     }
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+
+    #[test]
+    fn test_fraction_mul_0() {
+
+        let a = Fraction::try_from("5/1").unwrap();
+
+        let b = Fraction::try_from("9/1").unwrap();
+
+        let c = Fraction::try_from("45/1").unwrap();
+
+        assert_eq!(&a * &b, c)
+
+    }
+
+    #[test]
+    fn test_fraction_mul_1() {
+
+        let a = Fraction::try_from("-6/1").unwrap();
+
+        let b = Fraction::try_from("-1/1").unwrap();
+
+        let c = Fraction::try_from("6/1").unwrap();
+
+        assert_eq!(&a * &b, c)
+
+    }
+
 }

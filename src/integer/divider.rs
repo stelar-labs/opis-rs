@@ -33,9 +33,9 @@ pub fn run(numerator: &Integer, denominator: &Integer) -> (Integer, Integer) {
 
         });
     
-    quotient.clean();
+    quotient.truncate();
 
-    remainder.clean();
+    remainder.truncate();
 
     (quotient, remainder)
 

@@ -29,21 +29,21 @@ impl Rem for &Integer {
                 if self.0[0] == Bit::Zero {
                     self.clone()
                 } else {
-                    self.negate()
+                    self.inversion()
                 };
 
             let b_pos =
                 if b.0[0] == Bit::Zero {
                     b.clone()
                 } else {
-                    b.negate()
+                    b.inversion()
                 };
     
             let (_, remainder) = divider::run(&a_pos, &b_pos);
     
             if self.0[0] == Bit::One {
                 
-                Ok(remainder.negate())
+                Ok(remainder.inversion())
             
             } else {
 

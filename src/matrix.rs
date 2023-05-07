@@ -7,6 +7,7 @@ mod identity;
 mod inverse;
 mod minors;
 mod multiplication;
+mod submatrix;
 mod subtraction;
 mod trace;
 mod transpose;

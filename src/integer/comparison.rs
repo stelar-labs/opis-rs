@@ -2,9 +2,37 @@ use crate::{Integer, Bit};
 use std::cmp::Ordering;
 
 impl PartialEq for Integer {
+
     fn eq(&self, b: &Self) -> bool {
-        self.0 == b.0
+
+        if self.0.len() == b.0.len() {
+
+            self.0 == b.0
+
+        } else {
+
+            let mut trim_a = self.0.clone();
+
+            while trim_a.len() > 2 && trim_a[0] == trim_a[1] {
+
+                trim_a.remove(0);
+
+            }
+
+            let mut trim_b = b.0.clone();
+
+            while trim_b.len() > 2 && trim_b[0] == trim_b[1] {
+
+                trim_b.remove(0);
+
+            }
+            
+            trim_a == trim_b
+
+        }
+
     }
+
 }
 
 impl Eq for Integer {}

@@ -7,6 +7,7 @@ mod division;
 mod exponentiation;
 mod ext_gcd;
 mod extension;
+mod inversion;
 mod lfsr;
 mod multiplication;
 mod not;
@@ -15,6 +16,7 @@ mod remainder;
 mod shifting;
 mod string_conversion;
 mod subtraction;
+mod truncation;
 mod type_conversion;
 mod xor;
 use crate::{Bit, Integer};
@@ -49,10 +51,8 @@ impl Integer {
 
     }
 
-    pub fn negate(&self) -> Integer {
-
-        !self + Integer::one()
-        
+    pub fn neg_one() -> Self {
+        Integer(vec![Bit::One, Bit::One])
     }
 
     pub fn zero() -> Self {
@@ -69,12 +69,6 @@ impl Integer {
 
     pub fn three() -> Self {
         Integer(vec![Bit::Zero, Bit::One, Bit::One])
-    }
-
-    pub fn clean(&mut self) {
-        while self.0.len() > 2 && self.0[0] == self.0[1] {
-            self.0.remove(0);
-        }
     }
 
     pub fn bits(&self) -> Vec<Bit> {
@@ -114,10 +108,6 @@ mod tests {
     #[test]
     fn test_from_bin() {
         assert_eq!(Integer::from_bin("010").unwrap(), Integer::two());
-    }
-    #[test]
-    fn test_from_bin_neg() {
-        assert_eq!(Integer::from_bin("10").unwrap(), Integer::two().negate());
     }
     #[test]
     fn test_to_bin() {

@@ -5,11 +5,11 @@ impl Ord for Fraction {
 
     fn cmp(&self, b: &Self) -> Ordering {
 
-        if self.is_negative() && !b.is_negative() {
+        if self.sign() == false && b.sign() == true {
 
             Ordering::Less
 
-        } else if !self.is_negative() && b.is_negative() {  
+        } else if self.sign() == true && b.sign() == false {  
 
             Ordering::Greater
 

@@ -14,13 +14,16 @@ Roy R. O. Okello
 
 ## Features
 
+- Arbitrary Precision Integer Representation and Arithmetic
+- Fractions
+
 ## Usage
 
 ### Cargo.toml
 
 ```text
 [dependencies]
-opis = "5.3.1"
+opis = "5.4.0"
 ```
 
 ### Module.rs
@@ -147,4 +150,4 @@ Transpose `a.transpose()`
 
 ## Disclaimer
 
-12023-04-25
+12023-05-07

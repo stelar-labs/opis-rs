@@ -2,36 +2,87 @@
 use crate::{Integer, Bit};
 use std::ops::{Mul, MulAssign};
 
+use super::addition::adder;
+
 impl Mul for &Integer {
+
     type Output = Integer;
+    
     fn mul(self, b: Self) -> Integer {
-        
-        let precision = if self.0.len() > b.0.len() {
-            self.0.len() * 2
-        } else {
-            b.0.len() * 2
-        };
 
-        (0..precision)
-            .into_iter()
-            .fold(Integer::zero(), |acc, x| {
-                
-                let b_bit =
-                    if x > b.0.len() - 1 {
-                        b.0[0]
-                    } else {
-                        b.0[b.0.len() - x - 1]
-                    };
+        let precision = if self.0.len() > b.0.len() { self.0.len() } else { b.0.len() } * 2;
 
-                if b_bit == Bit::One {
-                    acc + (self << &x)
-                } else {
-                    acc
-                }
+        let extended_a: Vec<Bit> =
 
-            })
+            vec![self.0[0]; precision - self.0.len()]
+                .into_iter()
+                .chain(
+                    self
+                        .0
+                        .clone()
+                        .into_iter()
+                )
+                .collect();
+
+        let extended_b: Vec<Bit> =
+
+            vec![b.0[0]; precision - b.0.len()]
+                .into_iter()
+                .chain(
+                    b
+                        .0
+                        .clone()
+                        .into_iter()
+                )
+                .collect();
+
+        let product_bits =
+
+            extended_b
+                .iter()
+                .rev()
+                .enumerate()
+                .fold(
+                    vec![Bit::Zero],
+                    |acc, (i, x)|
+                    {
+
+                        if x == &Bit::One {
+
+                            let shifted_a: Vec<Bit> =
+                                
+                                extended_a
+                                    .clone()
+                                    .into_iter()
+                                    .chain(
+                                        vec![Bit::Zero; i]
+                                            .into_iter()
+                                    )
+                                    .collect();
+
+                            adder(&acc, &shifted_a)
+
+                        } else {
+                            
+                            acc
+
+                        }
+
+                    }
+                );
+
+        Integer(
+            product_bits
+                .iter()
+                .rev()
+                .take(precision)
+                .rev()
+                .cloned()
+                .collect()
+        )
 
     }
+
 }
 
 impl Mul for Integer {
@@ -141,4 +192,24 @@ impl MulAssign<&usize> for Integer {
         let b_int: Integer = b.into();
         *self = self.clone() * b_int
     }
+}
+
+#[cfg(test)]
+mod tests {
+    
+    use super::*;
+
+    #[test]
+    fn test_int_mul_0() {
+
+        let a = Integer::from_dec("-6").unwrap();
+
+        let b = Integer::from_dec("-1").unwrap();
+
+        let c = Integer::from_dec("6").unwrap();
+
+        assert_eq!(a * b, c);
+        
+    }
+
 }

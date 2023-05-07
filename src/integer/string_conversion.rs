@@ -25,7 +25,7 @@ impl Integer {
 
             let mut result = Integer(bits);
 
-            result.clean();
+            result.truncate();
 
             Ok(result)
 
@@ -94,7 +94,7 @@ impl Integer {
                 
                 if sign {
                     
-                    Ok(Integer(bits).negate())
+                    Ok(Integer(bits).inversion())
 
                 } else {
 
@@ -116,7 +116,7 @@ impl Integer {
         
         if self.0[0] == Bit::One {
 
-            format!("-{}", bits_to_dec_string(&self.negate().0[1..]))
+            format!("-{}", bits_to_dec_string(&self.inversion().0[1..]))
 
         } else {
 

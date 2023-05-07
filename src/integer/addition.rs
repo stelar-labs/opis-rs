@@ -15,59 +15,11 @@ impl Add for &Integer {
 
     fn add(self, b: Self) -> Integer {
 
-        let (w,x,y,z) = if self.0.len() > b.0.len() {
-
-            let d = self.0.len() - b.0.len();
-
-            (vec![vec![self.0[0]; 2], self.0[0..d].to_vec()].concat(), &b.0[0], &self.0[d..], &b.0)
-
-        } else {
-
-            let d = b.0.len() - self.0.len();
-
-            (vec![vec![b.0[0]; 2], b.0[0..d].to_vec()].concat(), &self.0[0], &b.0[d..], &self.0)
-
-        };
-        
-        let (mut b2, b1_c) = (0..y.len())
-            .into_iter()
-            .rev()
-            .fold((vec![], Bit::Zero), |(mut bits, c), o| {
-
-                let (c1, s1) = &c + &y[o];
-
-                let (c2, s2) = z[o] + s1;
-
-                bits.push(s2);
-
-                (bits, c1 ^ c2)
-
-            });
-
-        b2.reverse();
-
-        let (mut b1, _) = (0..w.len())
-            .into_iter()
-            .rev()
-            .fold((vec![], b1_c), |(mut bits, c), o| {
-
-                let (c1, s1) = c + w[o];
-
-                let (c2, s2) = s1 + x;
-
-                bits.push(s2);
-
-                (bits, c1 ^ c2)
-
-            });
-
-        b1.reverse();
-
-        let sum_bits = vec![b1, b2].concat();
+        let sum_bits = adder(&self.0, &b.0);
 
         let mut result = Integer(sum_bits);
 
-        result.clean();
+        result.truncate();
 
         result
 
@@ -175,6 +127,42 @@ impl AddAssign<&usize> for Integer {
         let b_int: Integer = b.into();
         *self = &self.clone() + &b_int
     }
+}
+
+pub fn adder(a: &[Bit], b: &[Bit]) -> Vec<Bit> {
+    
+    let precision = if a.len() > b.len() { a.len() } else { b.len() } + 1;
+
+    let mut a_pos = a.len() - 1;
+
+    let mut b_pos = b.len() - 1;
+
+    let mut carry = Bit::Zero;
+
+    (0..precision)
+        .into_iter()
+        .rev()
+        .fold(
+            vec![],
+            |sum, _|
+            {
+
+                let a_bit = if a_pos == 0 { a[0] } else { let r = a[a_pos]; a_pos -= 1; r };
+                
+                let b_bit = if b_pos == 0 { b[0] } else { let r = b[b_pos]; b_pos -= 1; r };
+
+                let (carry_1, sum_1) = carry + a_bit;
+
+                let (carry_2, sum_2) = sum_1 + b_bit;
+
+                carry = carry_1 ^ carry_2;
+
+                vec![sum_2].into_iter().chain(sum.into_iter()).collect()
+
+            }
+        
+        )
+
 }
 
 #[cfg(test)]

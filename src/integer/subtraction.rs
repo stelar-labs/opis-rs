@@ -11,7 +11,7 @@ impl Sub for Integer {
 impl Sub for &Integer {
     type Output = Integer;
     fn sub(self, b: Self) -> Integer {
-        self + &b.negate()
+        self + &b.inversion()
     }
 }
 
