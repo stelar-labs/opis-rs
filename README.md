@@ -4,18 +4,14 @@ Opis is a library for rational number and matrix arithmetic.
 
 ## Author
 
-Roy R. O. Okello
-
-[Email](mailto:royokello@protonmail.com)
-
-[Github](https://github.com/royokello)
-
-[Twitter](https://twitter.com/RealOkello)
+- Roy R. O. Okello: [Email](mailto:royokello@protonmail.com) & [GitHub](https://github.com/royokello)
 
 ## Features
 
 - Arbitrary Precision Integer Representation and Arithmetic
-- Fractions
+- Fractions Arithmetic
+- Matrix Arithmetic
+- Linear Regression
 
 ## Usage
 
@@ -32,9 +28,7 @@ opis = "5.4.0"
 use opis::{ Bit, Integer, Fraction, Matrix };
 ```
 
-### API
-
-#### Bit
+### Bit
 
 Add `a + b`
 
@@ -48,7 +42,7 @@ Or `a | b`
 
 Xor `a ^ b`
 
-#### Integer
+### Integer
 
 Addition `a + b, a += b`
 
@@ -98,7 +92,7 @@ Subtraction `a - b, a -= b`
 
 Type Conversion `2_u8.into()`
 
-#### Fraction
+### Fraction
 
 Addition `a + b, a += b`
 
@@ -120,7 +114,7 @@ Subtraction `a - b, a -= b`
 
 Type Conversion `2_u8.into()`
 
-#### Matrix
+### Matrix
 
 Addition `a + b`
 
@@ -134,7 +128,11 @@ Equality `a == b`
 
 Identity `Matrix::identity(size, zero, one)`
 
-Inverse `a.inverse(zero, one)`
+#### inverse
+`fn inverse(&self, neg_one: T, zero: T, one: T) -> Result<Matrix<T>, Box<dyn Error>>`
+
+#### linear_regression
+`fn linear_regression(&self, variables: &Matrix<T>, neg_one: T, zero: T, one: T) -> Result<Matrix<T>, Box<dyn Error>>`
 
 Minors `a.minors()`
 
@@ -148,6 +146,26 @@ Transpose `a.transpose()`
 
 ## License
 
+MIT License
+
+Copyright Stelar Labs
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
 ## Disclaimer
 
-12023-05-07
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

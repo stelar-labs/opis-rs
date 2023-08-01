@@ -5,6 +5,7 @@ mod determinant;
 mod dimensions;
 mod identity;
 mod inverse;
+mod linear_regression;
 mod minors;
 mod multiplication;
 mod submatrix;

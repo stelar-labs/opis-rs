@@ -13,4 +13,4 @@ pub struct Integer(Vec<Bit>);
 pub struct Fraction(Integer, Integer);
 
 #[derive(Debug, Clone)]
-pub struct Matrix<T>(Vec<Vec<T>>);
+pub struct Matrix<T>(pub Vec<Vec<T>>);
