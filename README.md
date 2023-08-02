@@ -10,8 +10,7 @@ Opis is a library for rational number and matrix arithmetic.
 
 - Arbitrary Precision Integer Representation and Arithmetic
 - Fractions Arithmetic
-- Matrix Arithmetic
-- Linear Regression
+- Matrix Arithmetic & Linear Regression
 
 ## Usage
 
@@ -116,33 +115,56 @@ Type Conversion `2_u8.into()`
 
 ### Matrix
 
-Addition `a + b`
+#### Addition
+`fn add(self, b: Self) -> Result<Matrix<T>, Box<dyn Error>>`
 
-Cofactors `a.cofactors(neg_one, one)`
+#### Cofactors
+`fn cofactors(&self, neg_one: T) -> Result<Matrix<T>, Box<dyn Error>>`
 
-Determinant `a.determinant()`
+#### Determinant
+`fn determinant(&self, neg_one: T) -> Result<T, Box<dyn std::error::Error>>`
 
-Dimensions `a.dimensions()`
+#### Dimensions
+`fn dimensions(&self) -> Result<(usize, usize), Box<dyn Error>>`
 
-Equality `a == b`
+#### Equality
+`fn eq(&self, b: &Self) -> bool`
 
-Identity `Matrix::identity(size, zero, one)`
+#### Identity
+`fn identity(size: usize, zero: T, one: T) -> Matrix<T>`
 
 #### inverse
 `fn inverse(&self, neg_one: T, zero: T, one: T) -> Result<Matrix<T>, Box<dyn Error>>`
 
-#### linear_regression
+#### Linear Regression
 `fn linear_regression(&self, variables: &Matrix<T>, neg_one: T, zero: T, one: T) -> Result<Matrix<T>, Box<dyn Error>>`
 
-Minors `a.minors()`
+#### Minors
+`fn minors(&self, neg_one: T) -> Result<Matrix<T>, Box<dyn Error>>`
 
-Multiplication `a * b`
+#### Multiplication
+`fn mul(self, b: Self) -> Result<Matrix<T>, Box<dyn Error>>`
+`fn mul(self, b: T) -> Matrix<T>`
 
-Subtraction `a - b`
+#### Subtraction
+`fn sub(self, b: Self) -> Result<Matrix<T>, Box<dyn Error>>`
 
-Trace `a.trace()`
+#### Trace
+```
+A = [-1  2  7  0]   Tr(A) = (-1 + 5 + 7 + 0) = 11
+    [ 3  5 -8  4]
+    [ 1  2  7 -3]
+    [ 4 -2  1  0]
+```
+`fn trace(&self) -> Result<T, Box<dyn Error>>`
 
-Transpose `a.transpose()`
+#### Transpose
+```
+A = [2 0]   A' = [2 1 4]
+    [1 1]        [0 1 3]
+    [4 3]
+```
+`fn transpose(&self) -> Result<Matrix<T>, Box<dyn Error>>`
 
 ## License
 

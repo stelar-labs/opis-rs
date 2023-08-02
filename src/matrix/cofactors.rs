@@ -2,7 +2,7 @@ use crate::Matrix;
 use std::error::Error;
 
 impl<T> Matrix<T>
-where T: std::ops::Mul<Output=T> + Clone + std::fmt::Debug {
+where T: std::ops::Mul<Output=T> + Clone {
 
    pub fn cofactors(&self, neg_one: T) -> Result<Matrix<T>, Box<dyn Error>> {
 

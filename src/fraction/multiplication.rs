@@ -14,11 +14,25 @@ impl Mul for &Fraction {
 
     fn mul(self, b: Self) -> Fraction {
 
-        let mut result = Fraction(&self.0 * &b.0, &self.1 * &b.1);
+        let result = if self == &Fraction::zero() || b == &Fraction::zero() {
+            Fraction::zero()
+        } else if self == &Fraction::one() {
+            b.clone()
+        } else if b == &Fraction::one() {
+            self.clone()
+        } else if self == &Fraction::neg_one() {
+            b.inversion()
+        } else if b == &Fraction::neg_one() {
+            self.inversion()
+        } else {
+            let mut result = Fraction(&self.0 * &b.0, &self.1 * &b.1);
+            result.reduce();
+            result
+        };
 
-        result.reduce();
+        println!("MUL {:?} * {:?} -> {:?}", self, b, result);
 
-        result
+        result 
 
     }
 

@@ -1,7 +1,7 @@
 
 use crate::{Integer, Bit};
 use std::error::Error;
-use std::ops::{Div};
+use std::ops::Div;
 use super::divider;
 
 impl Div for Integer {
@@ -65,13 +65,13 @@ impl Div for &Integer {
 
     fn div(self, b: Self) -> Result<Integer, Box<dyn Error>> {
 
-        if self == &Integer::zero() {
-
-            Ok(Integer::zero())
-
-        } else if b == &Integer::zero() {
+        if b == &Integer::zero() {
 
             Err("a/0 is undefined!")?
+
+        } else if self == &Integer::zero() {
+
+            Ok(Integer::zero())
 
         } else {
 

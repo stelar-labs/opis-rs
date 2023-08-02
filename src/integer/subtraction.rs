@@ -11,7 +11,11 @@ impl Sub for Integer {
 impl Sub for &Integer {
     type Output = Integer;
     fn sub(self, b: Self) -> Integer {
-        self + &b.inversion()
+        if b == &Integer::zero() {
+            self.clone()
+        } else {
+            self + &b.inversion()
+        }
     }
 }
 

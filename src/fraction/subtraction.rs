@@ -11,9 +11,13 @@ impl Sub for Fraction {
 impl Sub for &Fraction {
     type Output = Fraction;
     fn sub(self, b: Self) -> Fraction {
-        let mut result = Fraction((&self.0 * &b.1) - (&b.0 * &self.1), &self.1 * &b.1);
-        result.reduce();
-        result
+        if b == &Fraction::zero() {
+            self.clone()
+        } else {
+            let mut result = Fraction((&self.0 * &b.1) - (&b.0 * &self.1), &self.1 * &b.1);
+            result.reduce();
+            result
+        }
     }
 }
 

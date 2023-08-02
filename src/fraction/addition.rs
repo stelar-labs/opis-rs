@@ -19,13 +19,18 @@ impl Add for &Fraction {
 
     fn add(self, b: Self) -> Self::Output {
 
-        let mut result = Fraction((&self.0 * &b.1) + (&b.0 * &self.1), &self.1 * &b.1);
-
-        result.reduce();
-
-        result
-
+        if self == &Fraction::zero() {
+            b.clone()
+        } else if b == &Fraction::zero() {
+            self.clone()
+        } else {
+            let mut result = Fraction((&self.0 * &b.1) + (&b.0 * &self.1), &self.1 * &b.1);
+            result.reduce();
+            result
+        }
+        
     }
+
 }
 
 impl Add<&Integer> for &Fraction {
@@ -33,11 +38,8 @@ impl Add<&Integer> for &Fraction {
     type Output = Fraction;
     
     fn add(self, b: &Integer) -> Fraction {
-
         let b_frac: Fraction = b.into();
-
         self + &b_frac
-
     }
 
 }
@@ -47,11 +49,8 @@ impl Add<&u8> for &Fraction {
     type Output = Fraction;
 
     fn add(self, b: &u8) -> Fraction {
-
         let b_frac: Fraction = b.into();
-
         self + &b_frac
-
     }
 
 }

@@ -7,10 +7,10 @@ mod matrix;
 pub enum Bit { One, Zero }
 
 #[derive(Clone)]
-pub struct Integer(Vec<Bit>);
+pub struct Integer(pub Vec<Bit>);
 
 #[derive(Clone)]
-pub struct Fraction(Integer, Integer);
+pub struct Fraction(pub Integer, pub Integer);
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Matrix<T>(pub Vec<Vec<T>>);

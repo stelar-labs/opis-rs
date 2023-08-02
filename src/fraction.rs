@@ -10,22 +10,22 @@ mod reduction;
 mod string_conversion;
 mod subtraction;
 mod type_conversion;
-use crate::{Fraction, Bit};
+use crate::{Fraction, Bit, Integer};
 
 impl Fraction {
 
     pub fn sign(&self) -> bool {
-
         match (self.0.0[0], self.1.0[0]) {
-
-            (Bit::One, Bit::Zero) => false,
-
-            (Bit::Zero, Bit::One) => false,
-
-            _ => true
-
+            (Bit::One, Bit::Zero) => true,
+            (Bit::Zero, Bit::One) => true,
+            _ => false
         }
-
     }
+
+    pub fn zero() -> Fraction { Fraction(Integer::zero(), Integer::one()) }
+
+    pub fn one() -> Fraction { Fraction(Integer::one(), Integer::one()) }
+
+    pub fn neg_one() -> Fraction { Fraction(Integer::neg_one(), Integer::one()) }
     
 }

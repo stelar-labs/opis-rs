@@ -1,13 +1,7 @@
 use crate::Integer;
 
 impl Integer {
-   
-   pub fn inversion(&self) -> Integer {
-
-      !self + Integer::one()
-
-   }
-
+   pub fn inversion(&self) -> Integer { !self + Integer::one() }
 }
 
 #[cfg(test)]

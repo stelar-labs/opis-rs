@@ -1,10 +1,12 @@
+use std::error::Error;
+
 use crate::Matrix;
 
 impl<T> Matrix<T>
 
 where T: std::ops::Add<Output=T> + Clone {
 
-    pub fn trace(&self) -> Result<T, Box<dyn std::error::Error>> {
+    pub fn trace(&self) -> Result<T, Box<dyn Error>> {
 
         let (rows, columns) = self.dimensions()?;
         

@@ -14,6 +14,7 @@ mod not;
 mod or;
 mod remainder;
 mod shifting;
+mod sign;
 mod string_conversion;
 mod subtraction;
 mod truncation;
@@ -51,29 +52,17 @@ impl Integer {
 
     }
 
-    pub fn neg_one() -> Self {
-        Integer(vec![Bit::One, Bit::One])
-    }
+    pub fn neg_one() -> Self { Integer(vec![Bit::One, Bit::One]) }
 
-    pub fn zero() -> Self {
-        Integer(vec![Bit::Zero, Bit::Zero])
-    }
+    pub fn zero() -> Self { Integer(vec![Bit::Zero, Bit::Zero]) }
 
-    pub fn one() -> Self {
-        Integer(vec![Bit::Zero, Bit::One])
-    }
+    pub fn one() -> Self { Integer(vec![Bit::Zero, Bit::One]) }
 
-    pub fn two() -> Self {
-        Integer(vec![Bit::Zero, Bit::One, Bit::Zero])
-    }
+    pub fn two() -> Self { Integer(vec![Bit::Zero, Bit::One, Bit::Zero]) }
 
-    pub fn three() -> Self {
-        Integer(vec![Bit::Zero, Bit::One, Bit::One])
-    }
+    pub fn three() -> Self { Integer(vec![Bit::Zero, Bit::One, Bit::One]) }
 
-    pub fn bits(&self) -> Vec<Bit> {
-        self.0.clone()
-    }
+    pub fn bits(&self) -> Vec<Bit> { self.0.clone() }
 
 }
 

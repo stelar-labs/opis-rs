@@ -15,10 +15,10 @@ impl Fraction {
          };
 
          // make d positive 
-         let d = if self.0.0[0] == Bit::One {
-            self.0.inversion()
+         let d = if self.1.0[0] == Bit::One {
+            self.1.inversion()
          } else {
-            self.0.clone()
+            self.1.clone()
          };
          
          Fraction(n, d)
@@ -34,10 +34,10 @@ impl Fraction {
          };
 
          // make d positive
-         let d = if self.0.0[0] == Bit::One {
-            self.0.inversion()
+         let d = if self.1.0[0] == Bit::One {
+            self.1.inversion()
          } else {
-            self.0.clone()
+            self.1.clone()
          };
 
          Fraction(n, d)

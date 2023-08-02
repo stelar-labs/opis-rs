@@ -4,7 +4,7 @@ use std::{ops::{Mul, Add}, error::Error};
 use crate::Matrix;
 
 impl<T> Mul for Matrix<T>
-where T: Mul + Mul<Output = T> + Add<Output=T> + Clone{
+where T: Mul + Mul<Output = T> + Add<Output=T> + Clone + std::fmt::Debug{
 
     type Output = Result<Matrix<T>, Box<dyn Error>>;
 
@@ -47,7 +47,7 @@ where T: Mul + Mul<Output = T> + Clone {
 }
 
 impl<T> Mul for &Matrix<T>
-where T: Mul + Mul<Output = T> + Add<Output=T> + Clone{
+where T: Mul + Mul<Output = T> + Add<Output=T> + Clone + std::fmt::Debug{
 
     type Output = Result<Matrix<T>, Box<dyn Error>>;
 
@@ -73,7 +73,6 @@ where T: Mul + Mul<Output = T> + Add<Output=T> + Clone{
                                 (0..b_columns)
                                     .into_iter()
                                     .map(|b_column_i| {
-
                                         let b_row: Vec<T> = b.0.iter().map(|x| x[b_column_i].clone()).collect();
 
                                         (1..a_columns)

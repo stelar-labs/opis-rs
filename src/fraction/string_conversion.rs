@@ -9,7 +9,13 @@ impl TryFrom<&str> for Fraction {
 
         if split_value.len() == 2 {
 
-            Ok(Fraction(Integer::from_dec(split_value[0])?, Integer::from_dec(split_value[1])?))
+            let mut result = Fraction(Integer::from_dec(split_value[0])?, Integer::from_dec(split_value[1])?);
+
+            if result.0 == Integer::zero() || result.1 == Integer::zero() {
+                result = Fraction::zero()
+            }
+
+            Ok(result)
 
         } else {
 

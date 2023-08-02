@@ -10,76 +10,94 @@ impl Mul for &Integer {
     
     fn mul(self, b: Self) -> Integer {
 
-        let precision = if self.0.len() > b.0.len() { self.0.len() } else { b.0.len() } * 2;
+        if self == &Integer::zero() || b == &Integer::zero() {
+            Integer::zero()
+        } else if self == &Integer::one() {
+            b.clone()
+        } else if b == &Integer::one() {
+            self.clone()
+        } else if self == &Integer::neg_one() {
+            b.inversion()
+        } else if b == &Integer::neg_one() {
+            self.inversion()
+        } else {
 
-        let extended_a: Vec<Bit> =
+            let precision = if self.0.len() > b.0.len() { self.0.len() } else { b.0.len() } * 2;
 
-            vec![self.0[0]; precision - self.0.len()]
-                .into_iter()
-                .chain(
-                    self
-                        .0
-                        .clone()
-                        .into_iter()
-                )
-                .collect();
+            let extended_a: Vec<Bit> =
 
-        let extended_b: Vec<Bit> =
+                vec![self.0[0]; precision - self.0.len()]
+                    .into_iter()
+                    .chain(
+                        self
+                            .0
+                            .clone()
+                            .into_iter()
+                    )
+                    .collect();
 
-            vec![b.0[0]; precision - b.0.len()]
-                .into_iter()
-                .chain(
-                    b
-                        .0
-                        .clone()
-                        .into_iter()
-                )
-                .collect();
+            let extended_b: Vec<Bit> =
 
-        let product_bits =
+                vec![b.0[0]; precision - b.0.len()]
+                    .into_iter()
+                    .chain(
+                        b
+                            .0
+                            .clone()
+                            .into_iter()
+                    )
+                    .collect();
 
-            extended_b
-                .iter()
-                .rev()
-                .enumerate()
-                .fold(
-                    vec![Bit::Zero],
-                    |acc, (i, x)|
-                    {
+            let product_bits =
 
-                        if x == &Bit::One {
+                extended_b
+                    .iter()
+                    .rev()
+                    .enumerate()
+                    .fold(
+                        vec![Bit::Zero, Bit::Zero],
+                        |acc, (i, x)|
+                        {
 
-                            let shifted_a: Vec<Bit> =
+                            if x == &Bit::One {
+
+                                let shifted_a: Vec<Bit> =
+                                    
+                                    extended_a
+                                        .clone()
+                                        .into_iter()
+                                        .chain(
+                                            vec![Bit::Zero; i]
+                                                .into_iter()
+                                        )
+                                        .collect();
+
+                                adder(&acc, &shifted_a)
+
+                            } else {
                                 
-                                extended_a
-                                    .clone()
-                                    .into_iter()
-                                    .chain(
-                                        vec![Bit::Zero; i]
-                                            .into_iter()
-                                    )
-                                    .collect();
+                                acc
 
-                            adder(&acc, &shifted_a)
-
-                        } else {
-                            
-                            acc
+                            }
 
                         }
+                    );
 
-                    }
-                );
+            let mut result = Integer(
+                product_bits
+                    .iter()
+                    .rev()
+                    .take(precision)
+                    .rev()
+                    .cloned()
+                    .collect()
+            );
 
-        Integer(
-            product_bits
-                .iter()
-                .rev()
-                .take(precision)
-                .rev()
-                .cloned()
-                .collect()
-        )
+            result.truncate();
+
+            result
+
+        }
 
     }
 

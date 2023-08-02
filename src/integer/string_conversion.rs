@@ -64,46 +64,40 @@ impl Integer {
                     _ => (str, false)
                 };
 
-            let mut bits: Vec<Bit> = Vec::new();
+            if dec_str == "0" {
+                return Ok(Integer::zero());
+            } else {
 
-            let mut i_str = dec_str.to_string();
+                let mut bits: Vec<Bit> = Vec::new();
 
-            while i_str != "0".to_string() {
+                let mut i_str = dec_str.to_string();
 
-                let (s_half, rem) = half(&i_str);
+                while i_str != "0".to_string() {
 
-                i_str = s_half;
+                    let (s_half, rem) = half(&i_str);
 
-                match rem {
-                    0 => bits.push(Bit::Zero),
-                    1 => bits.push(Bit::One),
-                    _ => Err("Internal error!")?
+                    i_str = s_half;
+
+                    match rem {
+                        0 => bits.push(Bit::Zero),
+                        1 => bits.push(Bit::One),
+                        _ => Err("Internal error!")?
+                    }
+
                 }
 
-            }
+                bits.push(Bit::Zero);
 
-            bits.push(Bit::Zero);
-
-            bits.reverse();
-            
-            if bits.is_empty() {
-                    
-                Ok(Integer::zero())
-
-            } else {
+                bits.reverse();
                 
                 if sign {
-                    
                     Ok(Integer(bits).inversion())
-
                 } else {
-
                     Ok(Integer(bits))
-
                 }
-
-            }
             
+            }
+
         } else {
 
             Err("Internal error!")?

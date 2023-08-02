@@ -4,13 +4,9 @@ impl Fraction {
 
     pub fn reduce(&mut self) {
 
-        println!("self -> {:?}", self);
-
         if self.0 != Integer::zero() && self.1 != Integer::zero() {
             
             let (gcd, _, _) = self.0.ext_gcd(&self.1);
-
-            println!("gcd -> {:?}", gcd);
 
             if gcd != Integer::one() {
         

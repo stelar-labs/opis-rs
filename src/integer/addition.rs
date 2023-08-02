@@ -15,14 +15,16 @@ impl Add for &Integer {
 
     fn add(self, b: Self) -> Integer {
 
-        let sum_bits = adder(&self.0, &b.0);
-
-        let mut result = Integer(sum_bits);
-
-        result.truncate();
-
-        result
-
+        if self == &Integer::zero() {
+            b.clone()
+        } else if b == &Integer::zero() {
+            self.clone()
+        } else {
+            let sum_bits = adder(&self.0, &b.0);
+            let mut result = Integer(sum_bits);
+            result.truncate();
+            result
+        }
 
     }
 }

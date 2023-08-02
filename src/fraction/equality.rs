@@ -3,10 +3,8 @@ use crate::Fraction;
 impl PartialEq for Fraction {
 
     fn eq(&self, b: &Self) -> bool {
-
-        let self_sign = self.sign();
-
-        if self_sign == b.sign() {
+        
+        if self.sign() == b.sign() {
 
             let self_red = self.reduction();
 
