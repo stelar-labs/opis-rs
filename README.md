@@ -113,9 +113,9 @@ Type Conversion `2_u8.into()`
 
 #### Cofactors
 ```
-A = [ 3 -1 -2]   C = [ 3  1 -2]
-    [ 3  1 -1]        [-3  1  1]
-    [ 3  4  2]        [ 3 -4  2]
+A = [ 3 -1 -2]  C = [ 3  1 -2]
+    [ 3  1 -1]      [-3  1  1]
+    [ 3  4  2]      [ 3 -4  2]
 ```
 `fn cofactors(&self, neg_one: T) -> Result<Matrix<T>, Box<dyn Error>>`
 

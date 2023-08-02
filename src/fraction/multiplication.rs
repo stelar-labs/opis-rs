@@ -30,8 +30,6 @@ impl Mul for &Fraction {
             result
         };
 
-        println!("MUL {:?} * {:?} -> {:?}", self, b, result);
-
         result 
 
     }
