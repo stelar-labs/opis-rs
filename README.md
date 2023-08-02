@@ -14,14 +14,7 @@ Opis is a library for rational number and matrix arithmetic.
 
 ## Usage
 
-### Cargo.toml
-
-```text
-[dependencies]
-opis = "5.4.0"
-```
-
-### Module.rs
+### Import
 
 ```text
 use opis::{ Bit, Integer, Fraction, Matrix };
@@ -119,6 +112,11 @@ Type Conversion `2_u8.into()`
 `fn add(self, b: Self) -> Result<Matrix<T>, Box<dyn Error>>`
 
 #### Cofactors
+```
+A = [ 3 -1 -2]   C = [ 3  1 -2]
+    [ 3  1 -1]        [-3  1  1]
+    [ 3  4  2]        [ 3 -4  2]
+```
 `fn cofactors(&self, neg_one: T) -> Result<Matrix<T>, Box<dyn Error>>`
 
 #### Determinant
