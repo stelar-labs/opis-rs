@@ -1,6 +1,7 @@
 mod addition;
 mod comparison;
 mod debug;
+mod display;
 mod division;
 mod equality;
 mod inversion;
@@ -11,6 +12,12 @@ mod string_conversion;
 mod subtraction;
 mod type_conversion;
 use crate::{Fraction, Bit, Integer};
+
+impl Default for Fraction {
+    fn default() -> Self {
+        Fraction::zero()
+    }
+}
 
 impl Fraction {
 

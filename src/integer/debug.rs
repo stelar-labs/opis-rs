@@ -1,17 +1,12 @@
-use crate::{Bit, Integer};
-use std::fmt;
+use crate::Integer;
+use std::fmt::Debug;
 
-impl fmt::Debug for Integer {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.0
-            .iter()
-            .fold(String::new(),|mut acc, x| {
-                match x {
-                    Bit::One => acc.push('1'),
-                    Bit::Zero => acc.push('0')
-                }
-                acc
-            })
-        )
+impl Debug for Integer {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Integer")
+            .field("value", &self.to_dec())
+            .field("hex", &self.to_hex())
+            .field("bin", &self.to_bin())
+            .finish()
     }
 }

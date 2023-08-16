@@ -2,6 +2,7 @@ mod addition;
 mod and;
 mod comparison;
 mod debug;
+mod display;
 mod divider;
 mod division;
 mod exponentiation;
@@ -24,9 +25,14 @@ use crate::{Bit, Integer};
 use std::error::Error;
 mod mod_pow;
 
-impl Integer {
+impl Default for Integer {
+    fn default() -> Self {
+        Integer::zero()
+    }
+}
 
-    // MODULO
+impl Integer {
+    
     pub fn modulo(&self, modulus: &Integer) -> Result<Self, Box<dyn Error>> {
 
         if self == &Integer::zero() {

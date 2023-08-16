@@ -2,23 +2,15 @@ use crate::{Fraction, Integer};
 use std::ops::{Add, AddAssign};
 
 impl Add for Fraction {
-
     type Output = Fraction;
-
     fn add(self, b: Self) -> Self::Output {
-
         &self + &b
-
     }
-
 }
 
 impl Add for &Fraction {
-
     type Output = Fraction;
-
     fn add(self, b: Self) -> Self::Output {
-
         if self == &Fraction::zero() {
             b.clone()
         } else if b == &Fraction::zero() {
@@ -28,9 +20,7 @@ impl Add for &Fraction {
             result.reduce();
             result
         }
-        
     }
-
 }
 
 impl Add<&Integer> for &Fraction {

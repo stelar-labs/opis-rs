@@ -86,25 +86,30 @@ Type Conversion `2_u8.into()`
 
 ### Fraction
 
-Addition `a + b, a += b`
+#### Addition `a + b, a += b`
+```
+a   c   ad + cb
+- + - = -------
+b   d   bd
+```
 
-Comparison `a < b, a <= b, a > b, a >= b`
+#### Comparison `a < b, a <= b, a > b, a >= b`
 
-Division `a / b?`
+#### Division `a / b?`
 
-Equality `a == b`
+#### Equality `a == b`
 
-Multiplication `a * b, a *= b`
+#### Multiplication `a * b, a *= b`
 
-Reciprocal `a.reciprocal()`
+#### Reciprocal `a.reciprocal()`
 
-Reduce `a.reduce()`
+#### Reduce `a.reduce()`
 
-String Conversion `Fraction::try_from("1/2")`
+#### String Conversion `Fraction::try_from("1/2")`
 
-Subtraction `a - b, a -= b`
+#### Subtraction `a - b, a -= b`
 
-Type Conversion `2_u8.into()`
+#### Type Conversion `2_u8.into()`
 
 ### Matrix
 
@@ -112,12 +117,12 @@ Type Conversion `2_u8.into()`
 `fn add(self, b: Self) -> Result<Matrix<T>, Box<dyn Error>>`
 
 #### Cofactors
+`fn cofactors(&self, neg_one: T) -> Result<Matrix<T>, Box<dyn Error>>`
 ```
 A = [ 3 -1 -2]  C = [ 3  1 -2]
     [ 3  1 -1]      [-3  1  1]
     [ 3  4  2]      [ 3 -4  2]
 ```
-`fn cofactors(&self, neg_one: T) -> Result<Matrix<T>, Box<dyn Error>>`
 
 #### Determinant
 `fn determinant(&self, neg_one: T) -> Result<T, Box<dyn std::error::Error>>`
@@ -157,12 +162,12 @@ A = [-1  2  7  0]   Tr(A) = (-1 + 5 + 7 + 0) = 11
 `fn trace(&self) -> Result<T, Box<dyn Error>>`
 
 #### Transpose
+`fn transpose(&self) -> Result<Matrix<T>, Box<dyn Error>>`
 ```
 A = [2 0]   A' = [2 1 4]
     [1 1]        [0 1 3]
     [4 3]
 ```
-`fn transpose(&self) -> Result<Matrix<T>, Box<dyn Error>>`
 
 ## License
 

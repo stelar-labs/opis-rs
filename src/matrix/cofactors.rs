@@ -74,4 +74,15 @@ mod tests {
    
    }
 
+   #[test]
+   fn test_matrix_cofactors_3() {
+      
+      let m = Matrix(vec![vec![3,4], vec![-2,1]]);
+
+      let c = Matrix(vec![vec![3,-4], vec![2,1]]);
+      
+      assert_eq!(m.cofactors(-1).unwrap(), c)
+   
+   }
+
 }
