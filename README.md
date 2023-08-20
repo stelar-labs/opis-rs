@@ -36,6 +36,12 @@ Xor `a ^ b`
 
 ### Integer
 
+pub struct Integer(pub Vec<Bit>)
+
+- Hash
+- Display
+- Debug (:?, :x, :b)
+
 Addition `a + b, a += b`
 
 And `a & b`
@@ -82,34 +88,77 @@ Shifts `a << 1, a <<= 1, a >> 1, a >>= 1`
 
 Subtraction `a - b, a -= b`
 
-Type Conversion `2_u8.into()`
+#### Type Conversion
+
+From: &[Bits], &[u8], u8, u16, u32, u64, u128, usize
+Into: Vec<u8>
+
+#### String Conversion
+
+Support: Binary, Decimal, Hexadecimal, Floating Literal
 
 ### Fraction
 
-#### Addition `a + b, a += b`
-```
-a   c   ad + cb
-- + - = -------
-b   d   bd
-```
+pub struct Fraction(pub Integer, pub Integer)
 
-#### Comparison `a < b, a <= b, a > b, a >= b`
+- Clone
+- Hash
+- Display
+- Debug (:?, :x, :b)
 
-#### Division `a / b?`
+#### Addition
 
-#### Equality `a == b`
+(a,b) + (c,d) = (ad + bc, bd)
 
-#### Multiplication `a * b, a *= b`
+- Add (+)
+- AddAssign (+=)
 
-#### Reciprocal `a.reciprocal()`
+#### Subtraction
 
-#### Reduce `a.reduce()`
+(a,b) - (c,d) = (ad - bc, bd)
 
-#### String Conversion `Fraction::try_from("1/2")`
+- Sub (-)
+- SubAssign (-=)
 
-#### Subtraction `a - b, a -= b`
+#### Multiplication
 
-#### Type Conversion `2_u8.into()`
+(a,b) * (c,d) = (ac, bd)
+
+- Mul (*)
+- MulAssign (*=)
+
+#### Division
+
+(a,b) / (c,d) = (ad, bc) with c != 0
+
+- Div (/) -> `Result<Fraction, Box<dyn Error>>`
+
+#### Comparison & Equality
+
+#### Additive Inverse / Opposite
+
+-(a,b) = (-a,b)
+
+- `fraction.opposite() -> Fraction`
+
+#### Multiplicative Inverse / Reciprocal
+
+(a,b)^-1 = (b,a)
+
+- `fraction.reciprocal() -> Result<Fraction, Box<dyn Error>>`
+
+#### Reduce
+
+- `pub fn reduce(&mut self)`
+- `pub fn reduction(&self) -> Fraction`
+
+#### String Conversion
+
+Support:  Binary, Decimal, Hexadecimal, Floating Literal
+
+#### Type Conversion
+
+From: Integer, u8, u16, u32, u64, u128, usize
 
 ### Matrix
 

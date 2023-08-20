@@ -9,7 +9,7 @@ impl Div for &Fraction {
         } else if self == &Fraction::zero() {
             Ok(Fraction::zero())
         } else {   
-            Ok(self * &b.reciprocal())
+            Ok(self * &b.reciprocal().unwrap())
         }
     }
 }

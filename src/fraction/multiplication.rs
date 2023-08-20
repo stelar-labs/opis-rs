@@ -21,9 +21,9 @@ impl Mul for &Fraction {
         } else if b == &Fraction::one() {
             self.clone()
         } else if self == &Fraction::neg_one() {
-            b.inversion()
+            b.opposite()
         } else if b == &Fraction::neg_one() {
-            self.inversion()
+            self.opposite()
         } else {
             let mut result = Fraction(&self.0 * &b.0, &self.1 * &b.1);
             result.reduce();

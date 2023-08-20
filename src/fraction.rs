@@ -4,7 +4,7 @@ mod debug;
 mod display;
 mod division;
 mod equality;
-mod inversion;
+mod opposite;
 mod multiplication;
 mod reciprocal;
 mod reduction;

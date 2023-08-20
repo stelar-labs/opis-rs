@@ -2,7 +2,7 @@ use crate::{Fraction, Bit};
 
 impl Fraction {
    
-   pub fn inversion(&self) -> Fraction {
+   pub fn opposite(&self) -> Fraction {
 
       // if negative 
       if self.sign() {
