@@ -7,19 +7,88 @@ impl TryFrom<&str> for Fraction {
         
         let split_value: Vec<&str> = value.split("/").collect();
 
-        if split_value.len() == 2 {
+        match split_value.get(0) {
 
-            let mut result = Fraction(Integer::from_dec(split_value[0])?, Integer::from_dec(split_value[1])?);
+            Some(&a_str) => {
 
-            if result.0 == Integer::zero() || result.1 == Integer::zero() {
-                result = Fraction::zero()
-            }
+                let a = {
+                    
+                    let e_split: Vec<&str> = a_str.split("e").collect();
 
-            Ok(result)
+                    if e_split.is_empty() {
 
-        } else {
+                        Fraction::zero()
 
-            Err("Improper fraction format!")?
+                    } else {
+
+                        if e_split.len() == 1 {
+
+                            let e = match e_split[0].find('.') {
+                                Some(e_i) => (&(e_split[0].len() - e_i - 1)).into(),
+                                None => Integer::zero(),
+                            };
+
+                            let mantissa_str = e_split[0].replace(".", "");
+
+                            Fraction(
+                                Integer::try_from(&mantissa_str[..])?,
+                                Integer::ten().pow(&e)?
+                            )
+
+                        } else {
+                            
+                            let mantissa = Fraction::try_from(e_split[0])?;
+
+                            let exponent = Integer::try_from(e_split[1])?;
+
+                            mantissa * match exponent.0[0] {
+                                crate::Bit::One => {
+                                    Fraction(Integer::one(), Integer::ten().pow(&exponent.inversion())?)
+                                },
+                                crate::Bit::Zero => {
+                                    Fraction(Integer::ten().pow(&exponent)?, Integer::one())
+                                },
+                            }
+
+                        }
+
+                    }
+                    
+                };
+
+                if a == Fraction::zero() {
+
+                    Ok(Fraction::zero())
+
+                } else {
+
+                    match split_value.get(1) {
+
+                        Some(&b_str) => {
+                            
+                            let b = Fraction::try_from(b_str)?;
+
+                            if b == Fraction::zero() {
+
+                                Ok(Fraction::zero())
+
+                            } else {
+
+                                a / b
+                                
+                            }
+                            
+                        },
+                        
+                        None => Ok(a)
+
+                    }
+
+                }
+
+            },
+
+            None => Ok(Fraction::default())
 
         }
 
@@ -35,8 +104,32 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_try_from_str() {
+    fn test_try_from_str_0() {
         assert_eq!(Fraction::try_from("1/2").unwrap(), Fraction(Integer::one(), Integer::two()));
+    }
+
+    #[test]
+    fn test_try_from_str_1() {
+        assert_eq!(
+            Fraction::try_from("1e-1").unwrap(),
+            Fraction(Integer::one(), Integer::ten())
+        );
+    }
+
+    #[test]
+    fn test_try_from_str_2() {
+        assert_eq!(
+            Fraction::try_from("3e-1").unwrap(),
+            Fraction(Integer::three(),Integer::ten())
+        );
+    }
+
+    #[test]
+    fn test_try_from_str_3() {
+        assert_eq!(
+            Fraction::try_from("0.3e-2").unwrap(),
+            Fraction(Integer::three(),Integer::ten().pow(&Integer::three()).unwrap())
+        );
     }
 
 }

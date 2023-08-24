@@ -2,6 +2,34 @@ use std::error::Error;
 
 use crate::{Bit, Integer};
 
+impl TryFrom<&str> for Integer {
+    type Error = Box<dyn Error>;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+
+        if value.len() < 3 {
+
+            Integer::from_dec(value)
+
+        } else {
+
+            let (first, last) = value.split_at(2);
+
+            match &first.to_lowercase()[..] {
+
+                "b'" => Integer::from_bin(last),
+
+                "0x" => Integer::from_hex(last),
+
+                _ => Integer::from_dec(value)
+
+            }
+
+        }
+
+    }
+    
+}
 
 impl Integer {
 
@@ -374,5 +402,38 @@ fn half(s: &str) -> (String, u8) {
     }
 
     (res, rem)
+
+}
+
+#[cfg(test)]
+mod tests {
+    
+    use super::*;
+
+    #[test]
+    fn test_int_try_from_str_0() {
+        assert_eq!(
+            Integer::try_from("3").unwrap(),
+            Integer::three()
+        )
+    }
+
+    #[test]
+    fn test_int_try_from_str_1() {
+        assert_eq!(
+            Integer::try_from("b'011").unwrap(),
+            Integer::three()
+        )
+    }
+
+
+    #[test]
+    fn test_int_try_from_str_2() {
+        assert_eq!(
+            Integer::try_from("0x03").unwrap(),
+            Integer::three()
+        )
+    }
+
 
 }

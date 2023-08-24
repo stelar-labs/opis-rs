@@ -68,6 +68,8 @@ impl Integer {
 
     pub fn three() -> Self { Integer(vec![Bit::Zero, Bit::One, Bit::One]) }
 
+    pub fn ten() -> Self { Integer(vec![Bit::Zero, Bit::One, Bit::Zero, Bit::One, Bit::Zero]) }
+
     pub fn bits(&self) -> Vec<Bit> { self.0.clone() }
 
 }

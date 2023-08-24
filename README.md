@@ -40,7 +40,7 @@ pub struct Integer(pub Vec<Bit>)
 
 - Hash
 - Display
-- Debug (:?, :x, :b)
+- Debug (:?, :#, :x, :b)
 
 Addition `a + b, a += b`
 
@@ -80,18 +80,26 @@ Not `!a`
 
 Or `a | b`
 
-Exponentiation `a.pow(e)`
+Exponentiation `a.pow(e)?`
 
 Remainder: `a % b?`
 
 Shifts `a << 1, a <<= 1, a >> 1, a >>= 1`
 
+#### String Conversion
+
+`fn try_from(value: &str) -> Result<Self, Box<dyn Error>>`
+
+- Binary (b'11, b'00, b'01)
+- Decimal (-1, 0, 1)
+- Hexadecimal (0xFF, 0x00, 0x01)
+
 Subtraction `a - b, a -= b`
 
 #### Type Conversion
 
-From: &[Bits], &[u8], u8, u16, u32, u64, u128, usize
-Into: Vec<u8>
+- From: &[Bits], &[u8], u8, u16, u32, u64, u128, usize
+- Into: Vec<u8>
 
 #### String Conversion
 
@@ -104,7 +112,7 @@ pub struct Fraction(pub Integer, pub Integer)
 - Clone
 - Hash
 - Display
-- Debug (:?, :x, :b)
+- Debug (:?, :#, :x, :b)
 
 #### Addition
 
@@ -154,7 +162,7 @@ pub struct Fraction(pub Integer, pub Integer)
 
 #### String Conversion
 
-Support:  Binary, Decimal, Hexadecimal, Floating Literal
+Support:  Binary, Decimal, Hexadecimal, Floating Point Literal
 
 #### Type Conversion
 
