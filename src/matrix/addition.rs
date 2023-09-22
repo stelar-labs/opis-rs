@@ -3,13 +3,11 @@ use crate::Matrix;
 use std::error::Error;
 use std::ops::Add;
 
-impl<T> Add for Matrix<T>
-
-where T: std::ops::Add + std::clone::Clone + Add<Output = T> {
+impl<'a> Add for Matrix<'a> {
     
-    type Output = Result<Matrix<T>, Box<dyn Error>>;
+    type Output = Result<Matrix<'a>, Box<dyn Error>>;
 
-    fn add(self, b: Self) -> Result<Matrix<T>, Box<dyn Error>> {
+    fn add(self, b: Self) -> Result<Matrix<'a>, Box<dyn Error>> {
 
         &self + &b
 
@@ -17,13 +15,13 @@ where T: std::ops::Add + std::clone::Clone + Add<Output = T> {
     
 }
 
-impl<T> Add for &Matrix<T>
+impl<T> Add for &Matrix<'_>
 
 where T: std::ops::Add + std::clone::Clone + Add<Output = T> {
 
-    type Output = Result<Matrix<T>, Box<dyn Error>>;
+    type Output<'a> = Result<Matrix<'a>, Box<dyn Error>>;
 
-    fn add(self, b: Self) -> Result<Matrix<T>, Box<dyn Error>> {
+    fn add(self, b: Self) -> Result<Matrix<'static>, Box<dyn Error>> {
 
         let a_dimensions = self.dimensions()?;
 
@@ -38,7 +36,7 @@ where T: std::ops::Add + std::clone::Clone + Add<Output = T> {
                         .map(|row| {
                             (0..a_dimensions.1)
                                 .into_iter()
-                                .map(|column| self.0[row][column].clone() + b.0[row][column].clone())
+                                .map(|column| self.0[row][column] + b.0[row][column])
                                 .collect()
                         })
                         .collect()

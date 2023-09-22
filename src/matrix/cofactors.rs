@@ -47,6 +47,7 @@ where T: std::ops::Mul<Output=T> + Clone {
 
 }
 
+
 #[cfg(test)]
 mod tests {
    

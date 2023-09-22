@@ -1,6 +1,6 @@
 # Opis
 
-Opis is a library for rational number and matrix arithmetic.
+Opis is a library for Number and Matrix Arithmetic.
 
 ## Author
 
@@ -8,223 +8,86 @@ Opis is a library for rational number and matrix arithmetic.
 
 ## Features
 
-- Arbitrary Precision Integer Representation and Arithmetic
-- Fractions Arithmetic
-- Matrix Arithmetic & Linear Regression
+- Arbitrary Precision Number Representation and Arithmetic
+- Matrix Arithmetic
 
 ## Usage
 
-### Import
+### Installation
 
-```text
-use opis::{ Bit, Integer, Fraction, Matrix };
-```
+- From [Crates](https://crates.io/) by running `cargo add opis`
+- From Crates by adding `opis = "6.0.0"` to `Cargo.toml` under `[dependencies]`
 
 ### Bit
 
-Add `a + b`
-
-And `a & b`
-
-Eq `a == a`
-
-Not `!a`
-
-Or `a | b`
-
-Xor `a ^ b`
+- Add `a + b -> cd`
+- And `a & b -> c`
+- Eq `a == a -> bool`
+- Not `!a -> b`
+- Or `a | b -> c`
+- Xor `a ^ b -> c`
 
 ### Integer
 
-pub struct Integer(pub Vec<Bit>)
+- Addition `a + b -> c, a += b`
+- And `a & b -> c`
+- Bytes `Integer::from(&bytes), a.into()`
+- Comparision `a < b, a <= b, a > b, a >= b`
+- Division `a / b -> c/error`
+- Equality `a == b -> bool`
+- Extended Euclidean Algorithm `a.ext_gcd(&b) -> c,d,e`
+- Extended Bits `a.to_ext_bits(256) -> Vec<Bits>`
+- Extended Bytes `a.to_ext_bytes(32) -> Vec<u8>`
+- Inversion `a.inversion() -> b`
+- Modulo `a.modulo(&m) -> b/error`
+- Modular Exponentiation `a.mod_pow(&e, &m) -> b/error`
+- Multiply `a * b -> c, a *= b`
+- Not `!a -> b`
+- Or `a | b -> c`
+- Exponentiation `a.pow(e) -> b/error`
+- Remainder: `a % b -> c/error`
+- Shifts `a << 1 -> b, a <<= 1, a >> 1 -> b, a >>= 1`
+- String Conversion `Integer::try_from(&s) -> a/error`
+-- Binary (b'11, b'00, b'01)
+-- Decimal (-1, 0, 1)
+-- Hexadecimal (0xFF, 0x00, 0x01)
+-- Floating Literal (3e3)
+- Subtraction `a - b -> c, a -= b`
+- Type Conversion `&[Bits], &[u8], u8, u16, u32, u64, u128, usize`
 
-- Hash
-- Display
-- Debug (:?, :#, :x, :b)
-
-Addition `a + b, a += b`
-
-And `a & b`
-
-Base2 `Integer::from_bin("1010101"), a.to_bin()`
-
-Base10 `Integer::from_dec("674755"), a.to_dec()`
-
-Base16 `Integer::from_hex("00ABC012"), a.to_hex()`
-
-Bytes `Integer::from(&bytes), a.into()`
-
-Comparision `a < b, a <= b, a > b, a >= b`
-
-Division `a / b?`
-
-Equality `a == b`
-
-Extended Euclidean Algorithm `a.ext_gcd(&b)`
-
-Extended Bits `a.to_ext_bits(256)`
-
-Extended Bytes `a.to_ext_bytes(32)`
-
-Linear Feedback Shift Register `a.lfsr(1)?`
-
-Modulo: `a.modulo(&m)`
-
-Modular Exponentiation: `base.mod_pow(&exponent, &modulus)`
-
-Multiply `a * b, a *= b`
-
-Negate `a.negate()`
-
-Not `!a`
-
-Or `a | b`
-
-Exponentiation `a.pow(e)?`
-
-Remainder: `a % b?`
-
-Shifts `a << 1, a <<= 1, a >> 1, a >>= 1`
-
-#### String Conversion
-
-`fn try_from(value: &str) -> Result<Self, Box<dyn Error>>`
-
-- Binary (b'11, b'00, b'01)
-- Decimal (-1, 0, 1)
-- Hexadecimal (0xFF, 0x00, 0x01)
-
-Subtraction `a - b, a -= b`
-
-#### Type Conversion
-
-- From: &[Bits], &[u8], u8, u16, u32, u64, u128, usize
-- Into: Vec<u8>
-
-#### String Conversion
-
-Support: Binary, Decimal, Hexadecimal, Floating Literal
+<!-- Base2 `Integer::from_bin("1010101"), a.to_bin()` -->
+<!-- Base10 `Integer::from_dec("674755"), a.to_dec()` -->
+<!-- Base16 `Integer::from_hex("00ABC012"), a.to_hex()` -->
+<!-- Linear Feedback Shift Register `a.lfsr(1)?` -->
 
 ### Fraction
 
-pub struct Fraction(pub Integer, pub Integer)
-
-- Clone
-- Hash
-- Display
-- Debug (:?, :#, :x, :b)
-
-#### Addition
-
-(a,b) + (c,d) = (ad + bc, bd)
-
-- Add (+)
-- AddAssign (+=)
-
-#### Subtraction
-
-(a,b) - (c,d) = (ad - bc, bd)
-
-- Sub (-)
-- SubAssign (-=)
-
-#### Multiplication
-
-(a,b) * (c,d) = (ac, bd)
-
-- Mul (*)
-- MulAssign (*=)
-
-#### Division
-
-(a,b) / (c,d) = (ad, bc) with c != 0
-
-- Div (/) -> `Result<Fraction, Box<dyn Error>>`
-
-#### Comparison & Equality
-
-#### Additive Inverse / Opposite
-
--(a,b) = (-a,b)
-
-- `fraction.opposite() -> Fraction`
-
-#### Multiplicative Inverse / Reciprocal
-
-(a,b)^-1 = (b,a)
-
-- `fraction.reciprocal() -> Result<Fraction, Box<dyn Error>>`
-
-#### Reduce
-
-- `pub fn reduce(&mut self)`
-- `pub fn reduction(&self) -> Fraction`
-
-#### String Conversion
-
-Support:  Binary, Decimal, Hexadecimal, Floating Point Literal
-
-#### Type Conversion
-
-From: Integer, u8, u16, u32, u64, u128, usize
+- Addition `(a,b) + (c,d) = (ad + bc, bd)`
+- Subtraction `(a,b) - (c,d) = (ad - bc, bd)`
+- Multiplication `(a,b) * (c,d) = (ac, bd)`
+- Division `(a,b) / (c,d) = (ad, bc)/error`
+- Comparison & Equality
+- Additive Inverse / Opposite `-(a,b).opposite = (-a,b)`
+- Multiplicative Inverse / Reciprocal `(a,b).reciprocal() = (b,a)/error`
+- Reduction `a.reduction() -> b`
+- String Conversion: Binary, Decimal, Hexadecimal, Floating Literal
+- Type Conversion: Integer, u8, u16, u32, u64, u128, usize
 
 ### Matrix
 
-#### Addition
-`fn add(self, b: Self) -> Result<Matrix<T>, Box<dyn Error>>`
-
-#### Cofactors
-`fn cofactors(&self, neg_one: T) -> Result<Matrix<T>, Box<dyn Error>>`
-```
-A = [ 3 -1 -2]  C = [ 3  1 -2]
-    [ 3  1 -1]      [-3  1  1]
-    [ 3  4  2]      [ 3 -4  2]
-```
-
-#### Determinant
-`fn determinant(&self, neg_one: T) -> Result<T, Box<dyn std::error::Error>>`
-
-#### Dimensions
-`fn dimensions(&self) -> Result<(usize, usize), Box<dyn Error>>`
-
-#### Equality
-`fn eq(&self, b: &Self) -> bool`
-
-#### Identity
-`fn identity(size: usize, zero: T, one: T) -> Matrix<T>`
-
-#### inverse
-`fn inverse(&self, neg_one: T, zero: T, one: T) -> Result<Matrix<T>, Box<dyn Error>>`
-
-#### Linear Regression
-`fn linear_regression(&self, variables: &Matrix<T>, neg_one: T, zero: T, one: T) -> Result<Matrix<T>, Box<dyn Error>>`
-
-#### Minors
-`fn minors(&self, neg_one: T) -> Result<Matrix<T>, Box<dyn Error>>`
-
-#### Multiplication
-`fn mul(self, b: Self) -> Result<Matrix<T>, Box<dyn Error>>`
-`fn mul(self, b: T) -> Matrix<T>`
-
-#### Subtraction
-`fn sub(self, b: Self) -> Result<Matrix<T>, Box<dyn Error>>`
-
-#### Trace
-```
-A = [-1  2  7  0]   Tr(A) = (-1 + 5 + 7 + 0) = 11
-    [ 3  5 -8  4]
-    [ 1  2  7 -3]
-    [ 4 -2  1  0]
-```
-`fn trace(&self) -> Result<T, Box<dyn Error>>`
-
-#### Transpose
-`fn transpose(&self) -> Result<Matrix<T>, Box<dyn Error>>`
-```
-A = [2 0]   A' = [2 1 4]
-    [1 1]        [0 1 3]
-    [4 3]
-```
+- Addition `A + B -> C/error`
+- Cofactors `A.cofactors() -> C/error`
+- Determinant `A.det() -> d/error`
+- Size `A.size() -> (rows, columns)/error`
+- Equality `A == B -> bool`
+- Identity `Matrix::identity(size) -> I`
+- Inverse `A.inverse() -> A^-1/error`
+- Linear Regression `A.linear_regression(V) -> B/error`
+- Minors `A.minors() -> M/error`
+- Multiplication `A * B -> C/error, c * A -> B`
+- Subtraction `A - B -> C/error`
+- Trace `A.trace() -> t/error`
+- Transpose `A.transpose() -> A^T/error`
 
 ## License
 

@@ -13,3 +13,4 @@ mod submatrix;
 mod subtraction;
 mod trace;
 mod transpose;
+mod type_conversion;
