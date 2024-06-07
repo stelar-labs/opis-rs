@@ -165,6 +165,7 @@
 // }
 
 mod addition;
+mod type_conversion;
 
 #[cfg(target_pointer_width = "64")]
 type Digit = u64;
