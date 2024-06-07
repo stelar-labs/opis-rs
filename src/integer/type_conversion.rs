@@ -62,11 +62,16 @@ impl From<&[u8]> for Integer{
 
 }
 
-// impl Into<Vec<u8>> for Integer{
-//     fn into(self) -> Vec<u8> {
-//         bits_to_bytes(&self.0)
-//     }
-// }
+impl Into<Vec<u8>> for Integer {
+    fn into(self) -> Vec<u8> {
+        let mut result = Vec::new();
+        for digit in self.digits {
+            let bytes = digit.to_le_bytes();
+            result.extend_from_slice(&bytes);
+        }
+        result
+    }
+}
 
 // impl Into<Vec<u8>> for &Integer{
 //     fn into(self) -> Vec<u8> {
