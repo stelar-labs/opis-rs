@@ -20,15 +20,17 @@
 //     }
 // }
 
-// impl From<Vec<u8>> for Integer{
-//     fn from(value: Vec<u8>) -> Self {
-//         Integer::from(&value[..])
-//     }
-// }
+
 
 use crate::Integer;
 
 use super::Digit;
+
+impl From<Vec<u8>> for Integer{
+    fn from(value: Vec<u8>) -> Self {
+        Integer::from(&value[..])
+    }
+}
 
 impl From<&[u8]> for Integer{
 
