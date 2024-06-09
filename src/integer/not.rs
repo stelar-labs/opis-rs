@@ -1,34 +1,24 @@
 use crate::Integer;
 use std::ops::Not;
 
-impl Not for Integer {
+use super::Digit;
 
+impl Not for Integer {
     type Output = Self;
     
     fn not(self) -> Self::Output {
-        
         !&self
-    
     }
-
 }
 
 impl Not for &Integer {
-
     type Output = Integer;
-    
-    fn not(self) -> Integer {
-        
-        let not_bits =
-        
-            self
-                .0
-                .iter()
-                .map(|x| !x)
-                .collect();
-        
-        Integer(not_bits)
-    
-    }
 
+    fn not(self) -> Integer {
+        let inverted_digits = self.digits.iter()
+            .map(|&digit| !digit)
+            .collect::<Vec<Digit>>();
+
+        Integer { digits: inverted_digits }
+    }
 }
