@@ -10,11 +10,11 @@ impl Sub for Integer {
 
 impl Sub for &Integer {
     type Output = Integer;
-    fn sub(self, b: Self) -> Integer {
-        if b == &Integer::zero() {
+    fn sub(self, other: Self) -> Integer {
+        if other == &Integer::zero() {
             self.clone()
         } else {
-            self + &b.inversion()
+            self + &other.inversion()
         }
     }
 }
@@ -51,21 +51,21 @@ impl Sub<&u64> for &Integer {
     }
 }
 
-impl Sub<&u128> for &Integer {
-    type Output = Integer;
-    fn sub(self, b: &u128) -> Integer {
-        let b_int: Integer = b.into();
-        self - &b_int
-    }
-}
+// impl Sub<&u128> for &Integer {
+//     type Output = Integer;
+//     fn sub(self, b: &u128) -> Integer {
+//         let b_int: Integer = b.into();
+//         self - &b_int
+//     }
+// }
 
-impl Sub<&usize> for &Integer {
-    type Output = Integer;
-    fn sub(self, b: &usize) -> Integer {
-        let b_int: Integer = b.into();
-        self - &b_int
-    }
-}
+// impl Sub<&usize> for &Integer {
+//     type Output = Integer;
+//     fn sub(self, b: &usize) -> Integer {
+//         let b_int: Integer = b.into();
+//         self - &b_int
+//     }
+// }
 
 impl SubAssign for Integer {
     fn sub_assign(&mut self, b: Self) {
@@ -107,16 +107,16 @@ impl SubAssign<&u64> for Integer {
     }
 }
 
-impl SubAssign<&u128> for Integer {
-    fn sub_assign(&mut self, b: &u128) {
-        let b_int: Integer = b.into();
-        *self = &self.clone() - &b_int
-    }
-}
+// impl SubAssign<&u128> for Integer {
+//     fn sub_assign(&mut self, b: &u128) {
+//         let b_int: Integer = b.into();
+//         *self = &self.clone() - &b_int
+//     }
+// }
 
-impl SubAssign<&usize> for Integer {
-    fn sub_assign(&mut self, b: &usize) {
-        let b_int: Integer = b.into();
-        *self = &self.clone() - &b_int
-    }
-}
+// impl SubAssign<&usize> for Integer {
+//     fn sub_assign(&mut self, b: &usize) {
+//         let b_int: Integer = b.into();
+//         *self = &self.clone() - &b_int
+//     }
+// }

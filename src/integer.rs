@@ -167,6 +167,7 @@
 mod addition;
 mod inversion;
 mod not;
+mod subtraction;
 mod type_conversion;
 
 #[cfg(target_pointer_width = "64")]
