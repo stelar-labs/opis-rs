@@ -165,6 +165,7 @@
 // }
 
 mod addition;
+mod inversion;
 mod not;
 mod type_conversion;
 
