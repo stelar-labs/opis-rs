@@ -164,20 +164,16 @@
 //     }
 // }
 
+use digit::Digit;
+
 mod addition;
+mod digit;
 mod inversion;
 mod not;
+mod shifting;
 mod subtraction;
 mod type_conversion;
 
-#[cfg(target_pointer_width = "64")]
-type Digit = u64;
-
-#[cfg(target_pointer_width = "32")]
-type Digit = u32;
-
-#[cfg(not(any(target_pointer_width = "64", target_pointer_width = "32")))]
-type Digit = u8;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Integer {
@@ -189,14 +185,12 @@ impl Integer {
         Integer { digits }
     }
 
-    // Determines if the most significant bit of the most significant digit is set
-    pub fn most_significant_bit(&self) -> bool {
+    pub fn most_significant_bit(&self, total_bits: Option<usize>) -> bool {
+        let total_bits = total_bits.unwrap_or_else(|| std::mem::size_of::<Digit>() * 8);
         if let Some(&last_digit) = self.digits.last() {
-            // Check the most significant bit (MSB) of the last digit
-            let total_bits = std::mem::size_of::<Digit>() * 8;
             last_digit & (1 << (total_bits - 1)) != 0
         } else {
-            false // If no digits are present, return false (no bits are set)
+            false
         }
     }
 
